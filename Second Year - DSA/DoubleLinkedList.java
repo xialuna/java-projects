@@ -64,7 +64,8 @@ class DoublyLinkedList {
     void traverse() {
         Node temp = head;
         while (temp != null) {
-            System.out.println("Node: " + temp.data + " , Next: " + (temp.next != null ? temp.next.data : "null"));
+            System.out.println("Node: " + temp.data + " , Next: " + 
+            (temp.next != null ? temp.next.data : "null"));
             temp = temp.next;
         }
     }

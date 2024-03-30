@@ -1,1 +1,1 @@
-String[] input;
+     in.nextLine();

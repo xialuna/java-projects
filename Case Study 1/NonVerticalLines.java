@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 public class NonVerticalLines {
     private static Scanner in = new Scanner(System.in);
     public static int get_problem(){
@@ -23,7 +25,6 @@ public class NonVerticalLines {
     public static double[] get_pt_slope(){
         System.out.print("Enter the slope=> ");
         double slope = in.nextFloat();
-        in.nextLine();
         System.out.print("Enter the x-y coordinates of the point separated by a space=> ");
         double x = in.nextFloat();
         double y = in.nextFloat();
@@ -57,9 +58,12 @@ public class NonVerticalLines {
     }
 
     public static void display_slope_intcpt(double slope, double y_intercept){
-        System.out.println("\nSlope-intercept form");
         //prints out the truncated version of both numbers and prevents rounding up (1.666 = 1.66 instead of 1.67)
-        System.out.printf("y = %.2fx + %.2f\n", Math.floor(slope * 100)/ 100, Math.floor(y_intercept * 100)/ 100); 
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.DOWN);
+        
+        System.out.println("\nSlope-intercept form");
+        System.out.println("y = " + df.format(slope) + "x + " + df.format(y_intercept));
     }
 
     public static void main(String[] args){

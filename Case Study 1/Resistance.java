@@ -37,5 +37,7 @@ public class Resistance {
             choice = Character.toLowerCase(in.next().charAt(0));
             in.nextLine(); //get \n excess
         }while(choice == 'y');
+       
+        in.close();
     }
 }

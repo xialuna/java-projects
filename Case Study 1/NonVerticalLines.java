@@ -9,57 +9,57 @@ public class NonVerticalLines {
         return in.nextInt();
     }
 //Choice: 1 Prompts the user for the x-y coordinates of both points 
-    public static float[][] get2_pt(){
-        float[][] coords = new float[2][2]; //pwede rin dito yung di na mag-parse, 4 float variables nalang gamitin (like ginawa ko sa choice 2), pero same sila na 5 spaces marereserve
-        String[] input;
-        for(int i = 0; i < 2; i++){
-            System.out.printf("Enter the x-y coordinates of the %s point separated by a space =>\n",(i == 0)? "first":"second");
-            input = (in.nextLine()).split(" ");
-            coords[i][0] = Float.parseFloat(input[0]);
-            coords[i][1] = Float.parseFloat(input[1]);
-        }return coords;
+    public static double[] get2_pt(){
+        System.out.print("Enter the x-y coordinates of the first point separate by a space=> ");
+        double x1 = in.nextDouble();
+        double y1 = in.nextDouble();
+        System.out.print("Enter the x-y coordinates of the second point separated by a space=> ");
+        double x2 = in.nextDouble();
+        double y2 = in.nextDouble();
+        return new double[] {x1, y1, x2, y2};
     }
 
 //Choice 2: Prompts the user for the slope and x-y coordinates of the point
-    public static float[] get_pt_slope(){
+    public static double[] get_pt_slope(){
         System.out.print("Enter the slope=> ");
-        float slope = in.nextFloat();
+        double slope = in.nextFloat();
         in.nextLine();
         System.out.print("Enter the x-y coordinates of the point separated by a space=> ");
-        float x = in.nextFloat();
-        float y = in.nextFloat();
+        double x = in.nextFloat();
+        double y = in.nextFloat();
 
-        return new float[]{x,y,slope};
+        return new double[]{x,y,slope};
     }
 
 //Choice 1: returns through output parameters the slope (m) and y-intercept (b).
-    public static float[] slope_intcpt_from2_pt(float p1_x, float p1_y, float p2_x, float p2_y){
-        float slope = (p2_y - p1_y)/(p2_x - p1_x); //pwedeng tanggalin variaable pero for readability naglagay ako
-        float y_intercept = p1_y - slope * p1_x;
-        return new float[] {slope,y_intercept};
+    public static double[] slope_intcpt_from2_pt(double x1, double y1, double x2, double y2){
+        double slope = (y2 - y1)/(x2 - x1); 
+        double y_intercept = y1 - slope * x1;
+        return new double[] {slope,y_intercept};
     }
 
 //Choice 2: returns as the function value the y-intercept
-    public static float intcpt_from_pt_slope(float x, float y, float slope){
+    public static double intcpt_from_pt_slope(double x, double y, double slope){
         return y - slope * x;
     }
 
 //Display Choice 1(Two-point form)
-    public static void display2_pt(float p1_x, float p1_y, float p2_x, float p2_y){
+    public static void display2_pt(double x1, double y1, double x2, double y2){
         System.out.println("Two-point form");
-        System.out.printf("\t(%.2f - %.2f)\n", p2_y,p1_y);
+        System.out.printf("\t(%.2f - %.2f)\n", y2, y1);
         System.out.println("m = ----------------------");
-        System.out.printf("\t(%.2f - %.2f)\n",p2_x,p1_x);   
+        System.out.printf("\t(%.2f - %.2f)\n",x2, x1);   
     }
     
-    public static void display_pt_slope(float x, float y, float slope){
+    public static void display_pt_slope(double x, double y, double slope){
         System.out.println("\nPoint-slope form");
-        System.out.printf("y - %.2f = %.2f (x - %.2f) \n", x,slope,y);
+        System.out.printf("y - %.2f = %.2f (x - %.2f) \n", x, slope, y);
     }
 
-    public static void display_slope_intcpt(float slope, float y_intercept){
+    public static void display_slope_intcpt(double slope, double y_intercept){
         System.out.println("\nSlope-intercept form");
-        System.out.printf("y = %.2fx + %.2f\n", slope,y_intercept);
+        //prints out the truncated version of both numbers and prevents rounding up (1.666 = 1.66 instead of 1.67)
+        System.out.printf("y = %.2fx + %.2f\n", Math.floor(slope * 100)/ 100, Math.floor(y_intercept * 100)/ 100); 
     }
 
     public static void main(String[] args){
@@ -68,17 +68,21 @@ public class NonVerticalLines {
             switch (get_problem()){
                 case 1:{
                     in.nextLine();
-                    float[][] coords = get2_pt();
-                    float[] result = slope_intcpt_from2_pt(coords[0][0],coords[0][1], coords[1][0], coords[1][1]);
-                    display2_pt(coords[0][0],coords[0][1], coords[1][0], coords[1][1]);
-                    display_slope_intcpt(result[0], result[1]);
+                    double[] coords = get2_pt();
+                    double x1 = coords[0], y1 = coords[1], x2 = coords[2], y2 = coords[3]; //assign coords[] values for readability
+                    double[] result = slope_intcpt_from2_pt(x1, y1 ,x2 ,y2);
+                    double slope = result[0], y_intercept = result[1]; //assign result[] values for readability
+                    display2_pt(x1, y1, x2, y2);
+                    display_slope_intcpt(slope, y_intercept);
                     break;
                 }case 2:{
-                    float[] coords = get_pt_slope();
-                    display_pt_slope(coords[0], coords[1], coords[2]);
-                    display_slope_intcpt(coords[2],intcpt_from_pt_slope(coords[0], coords[1], coords[2]));
+                    double[] coords = get_pt_slope();
+                    double x = coords[0], y = coords[1], slope = coords[2]; //assign coords[] values for readability
+                    display_pt_slope(x, y, slope);
+                    display_slope_intcpt(slope, intcpt_from_pt_slope(x, y, slope));
                     break;
                 }default:{
+                    System.out.println("\nInvalid input. Please try again.");
                     break;
                 }
             }System.out.print("\nDo another conversion (Y or N)=> ");

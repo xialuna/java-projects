@@ -26,11 +26,14 @@ public class Resistance {
            if(!(invalidWord.equals("none"))){
                 System.out.println("Invalid color: "+ invalidWord);
            }else{
-                double resistance = ((bands[0] * 10 + bands[1]) * Math.pow(10,bands[2]))/1000;
-                System.out.println("Resistance value: " + (int)resistance + " kilo-ohms");
+                double resistance = ((bands[0] * 10 + bands[1]) * Math.pow(10,bands[2]));
+                int kiloohms = (int) resistance / 1000;
+                System.out.print("Resistance value: " + kiloohms + " kilo-ohms");
+                    if (kiloohms == 0)
+                        System.out.print(" ("+ (int)resistance + " ohms)"); 
            }
            
-            System.out.println("Do you want to decode another resistor?");
+            System.out.println("\nDo you want to decode another resistor(y/n)?");
             choice = Character.toLowerCase(in.next().charAt(0));
             in.nextLine(); //get \n excess
         }while(choice == 'y');

@@ -8,27 +8,19 @@ public class NonVerticalLines {
         System.out.print("=> ");
         return in.nextInt();
     }
-/*
-Choice: 1
-Prompts the user for the x-y coordinates of both points, inputs the four coordinates,
-and returns them to the calling function through output parameters. */
+//Choice: 1 Prompts the user for the x-y coordinates of both points 
     public static float[][] get2_pt(){
-        float[][] coords = new float[2][2];
+        float[][] coords = new float[2][2]; //pwede rin dito yung di na mag-parse, 4 float variables nalang gamitin (like ginawa ko sa choice 2), pero same sila na 5 spaces marereserve
         String[] input;
         for(int i = 0; i < 2; i++){
             System.out.printf("Enter the x-y coordinates of the %s point separated by a space =>\n",(i == 0)? "first":"second");
             input = (in.nextLine()).split(" ");
             coords[i][0] = Float.parseFloat(input[0]);
             coords[i][1] = Float.parseFloat(input[1]);
-        }
-        return coords;
+        }return coords;
     }
 
-/*
-Choice 2:
- Prompts the user for the slope and x-y coordinates of the point, inputs the three 
-values and returns them to the calling function through output parameters.
- */
+//Choice 2: Prompts the user for the slope and x-y coordinates of the point
     public static float[] get_pt_slope(){
         System.out.print("Enter the slope=> ");
         float slope = in.nextFloat();
@@ -39,7 +31,6 @@ values and returns them to the calling function through output parameters.
 
         return new float[]{x,y,slope};
     }
-
 
 //Choice 1: returns through output parameters the slope (m) and y-intercept (b).
     public static float[] slope_intcpt_from2_pt(float p1_x, float p1_y, float p2_x, float p2_y){
@@ -61,7 +52,6 @@ values and returns them to the calling function through output parameters.
         System.out.printf("\t(%.2f - %.2f)\n",p2_x,p1_x);   
     }
     
-
     public static void display_pt_slope(float x, float y, float slope){
         System.out.println("\nPoint-slope form");
         System.out.printf("y - %.2f = %.2f (x - %.2f) \n", x,slope,y);
@@ -72,8 +62,6 @@ values and returns them to the calling function through output parameters.
         System.out.printf("y = %.2fx + %.2f\n", slope,y_intercept);
     }
 
-
-    
     public static void main(String[] args){
         char choice; 
         do{
@@ -93,12 +81,9 @@ values and returns them to the calling function through output parameters.
                 }default:{
                     break;
                 }
-            }
-
-            System.out.print("\nDo another conversion (Y or N)=> ");
+            }System.out.print("\nDo another conversion (Y or N)=> ");
             choice = Character.toUpperCase(in.next().charAt(0));
 
         }while(choice == 'Y');
-       
     }
 }

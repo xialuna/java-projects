@@ -18,7 +18,7 @@ public class IntravenousRate {
         float rate = in.nextFloat();
         System.out.print("Enter tubing/'s drop factor (drops/ml) => ");
         float dropFactor = in.nextFloat();
-        return fig_drops_min(rate,dropFactor);//idk if pwsede ito since di siya inispecify sa instruc
+        return fig_drops_min(rate,dropFactor);
     }
 
     //Problem 3

@@ -58,12 +58,8 @@ public class NonVerticalLines {
     }
 
     public static void display_slope_intcpt(double slope, double y_intercept){
-        //prints out the truncated version of both numbers and prevents rounding up (1.666 = 1.66 instead of 1.67)
-        DecimalFormat df = new DecimalFormat("0.00");
-        df.setRoundingMode(RoundingMode.DOWN);
-        
         System.out.println("\nSlope-intercept form");
-        System.out.println("y = " + df.format(slope) + "x + " + df.format(y_intercept));
+        System.out.printf("y = %.2fx + %.2f\n",slope, y_intercept);
     }
 
     public static void main(String[] args){

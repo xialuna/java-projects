@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+//Program that converts either two-point form or point-slope form into slope-intercept form
 public class NonVerticalLines {
     private static Scanner in = new Scanner(System.in);
 
@@ -73,7 +74,7 @@ public class NonVerticalLines {
         char choice; 
         do{
             switch (get_problem()){
-                //Slope-intercept form to Two-point form 
+                //Two-point form to Slope-intercept form
                 case 1:{
                     in.nextLine();  // Consumes excess newline left by previous input
                     double[] coords = get2_pt(); // Retrieves and assign the x-y coordinates of two points from the user
@@ -83,7 +84,7 @@ public class NonVerticalLines {
                     display2_pt(x1, y1, x2, y2);
                     display_slope_intcpt(slope, y_intercept);
                     break;
-                }//Slope-intercept form to Point-slope form
+                }//Point-slope form to Slope-intercept form
                 case 2:{ 
                     double[] coords = get_pt_slope(); // Retrieves and assign slope and coordinates of a point from the user
                     double x = coords[0], y = coords[1], slope = coords[2]; 
@@ -96,7 +97,8 @@ public class NonVerticalLines {
                 }
             }
             System.out.print("\nDo another conversion (Y or N)=> "); 
-            choice = Character.toUpperCase(in.next().charAt(0));
-        } while(choice == 'Y');//ends when user inputs another  character other than 'Y'/'y'
+            choice = Character.toUpperCase(in.next().charAt(0)); // Takes user input for continuation
+        } while(choice == 'Y');// Continues the program if user inputs 'y'/'Y'
+        in.close();
     } 
 }

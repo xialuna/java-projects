@@ -1,6 +1,16 @@
+/**
+ * @author GROUP # 2
+ * Members:
+ * - Cheng, Xian
+ * - Pascual, Ian Nevri
+ * - Quinto, Raven Luke
+ * 
+ * CASE STUDY 2: MyDate Class 
+ */
 import java.util.Scanner;
-public class Main {
-    public static void main(String[] args){
+//test program for MyDate Class
+public class Test {
+    public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
 
         System.out.print("[1] Print out test program\n[2] Print out each day from 28 Dec 2011 to 2 Mar 2012\n>> ");
@@ -8,7 +18,8 @@ public class Main {
 
         switch (option) {
             case 1:
-                MyDate d1 = new MyDate(2012,2,28);
+                // Test program
+                MyDate d1 = new MyDate(2012, 2, 28);
 
                 System.out.println(d1);
                 System.out.println(d1.nextDay());
@@ -27,20 +38,19 @@ public class Main {
 
                 MyDate d3 = new MyDate(2012, 2, 29);
                 System.out.println(d3.previousYear());
-
-                //MyDate d4 = new MyDate(2099, 11, 31);
-                //MyDate d5 = new MyDate(2011, 2, 29);
                 break;
             case 2:
+                // Printing each day from 28 Dec 2011 to 2 Mar 2012
                 MyDate test = new MyDate(2011, 12, 28);
                 System.out.println(test);
-                while (!(test.getYear() == 2012 && test.getMonth() == 3 && test.getDay() == 2)){
+                while (!(test.getYear() == 2012 && test.getMonth() == 3 && test.getDay() == 2)) {
                     System.out.println(test.nextDay());
                 }
                 break;
             default:
+                System.out.println("Invalid Input");
                 break;
-        } // switch end
+        }
         scan.close();
-    } // main func end
+    }
 }

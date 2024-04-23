@@ -1,5 +1,5 @@
 /**
- * @author GROUP #
+ * @author GROUP # 2
  * Members:
  * - Cheng, Xian
  * - Pascual, Ian Nevri
@@ -7,44 +7,44 @@
  * 
  * CASE STUDY 2: MyDate Class 
  */
-
 public class MyDate{
     // Private instance variables
     private int year, month, day;
-        
-    // constructor for MyDate
-    MyDate(int year, int month, int day){
+
+    // Constructor for MyDate
+    MyDate(int year, int month, int day) {
         setDate(year, month, day);
     }
 
+    // Static final variables
     public static final String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     public static final String[] DAYS = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     public static final int[] DAYS_IN_MONTHS = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-    public static boolean isLeapYear(int year){
-        if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)){                
-            DAYS_IN_MONTHS[1] = 29;
-            return true;
-        } // if end
-        return false;
-    } // isLeapYear end
+    // Method to check if a year is a leap year
+    public static boolean isLeapYear(int year) {
+        return (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)); // returns true or false
+    }
 
-    public static boolean isValidDate(int year, int month, int day){ 
-        if (year <=9999 && year >= 1){
-            if (month <= 12 && month >= 1){
-                if (day >= 1 && day <= DAYS_IN_MONTHS[month-1]){
-                    return true;
-                } // if end
-            } // if end
-        } // if end
-        return false;
-    } // isValidDate end
+    // Method to check if a date is valid
+    public static boolean isValidDate(int year, int month, int day) {
+        // Check if the year and month are within valid ranges
+        if (year < 1 || year > 9999 || month < 1 || month > 12)
+            return false;
 
-    public static int getDayOfWeek(int year, int month, int day){
-        if (month == 1){    // for January
+        // Adjust February's day if it's a leap year
+        if (month == 2 && isLeapYear(year))
+            return day >= 1 && day <= 29;
+        else
+            return day >= 1 && day <= DAYS_IN_MONTHS[month - 1]; // returns true / false
+    }
+
+    // Method to get the day of the week
+    public static int getDayOfWeek(int year, int month, int day) {
+        if (month == 1) {    // for January
             month = 13;
             year--;
-        } else if (month == 2){ // for February
+        } else if (month == 2) { // for February
             month = 14;
             year--;
         }
@@ -54,135 +54,141 @@ public class MyDate{
         int m = month;
         int k = year % 100;
         int j = year / 100;
-        int h = q + 13*(m + 1) / 5 + k + k / 4 + j / 4 + 5 * j;
+        int h = q + 13 * (m + 1) / 5 + k + k / 4 + j / 4 + 5 * j;
         h = h % 7;
 
-        if (h == 0){    // goes back to the end of DAYS[] since counting starts from 1
-            return DAYS.length-1;
+        if (h == 0) {    // goes back to the end of DAYS[] since counting starts from 1
+            return DAYS.length - 1;
         } else {
-            return h-1;
+            return h - 1;
         }
-            
     }
 
-    public void setDate(int year, int month, int day){            
-        if (isValidDate(year, month, day) == true){
-            setYear(year);
-            setMonth(month);
-            setDay(day);
-        } else {
+    public void setDate(int year, int month, int day) {
+        // Check if the date is valid
+        if (!isValidDate(year, month, day)) {
             throw new IllegalArgumentException("Invalid year, month, or day!");
         }
-        //toString(); // prints date if object is printed
-        }
+        // Set the instance variables
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
 
-    public void setYear(int year){
-        if (year >= 1 && year <= 9999){
-            this.year = year;                
+    public void setYear(int year) {
+        // Check if the year is valid
+        if (year >= 1 && year <= 9999) {
+            this.year = year;
         } else {
-                throw new IllegalArgumentException("Invalid year!");
+            throw new IllegalArgumentException("Invalid year!");
         }
     }
 
-    public void setMonth(int month){
-        if (month >= 1 && month <= 12){
+    public void setMonth(int month) {
+        //Check if the month is valid
+        if (month >= 1 && month <= 12) {
             this.month = month;
         } else {
             throw new IllegalArgumentException("Invalid month!");
         }
     }
 
-    public void setDay(int day){
-        int dayMax = 0;
-        dayMax = DAYS_IN_MONTHS[getMonth()-1];
-        if (isLeapYear(getYear()) == true && day <= dayMax){
-            this.day = day;
-        } else if (day <= dayMax) {
-            this.day = day;
-        } else {
+    public void setDay(int day) {
+        // Determine the month and year's maximum number of days
+        int dayMax = DAYS_IN_MONTHS[month - 1];
+        // Adjust for February if it's a leap year
+        if (month == 2 && isLeapYear(year))
+            dayMax = 29;
+        // Check if the provided day is valid
+        if (day < 1 || day > dayMax)
             throw new IllegalArgumentException("Invalid day!");
-        }   
+        this.day = day;
     }
 
-    public int getYear(){
+    // Getter methods
+    public int getYear() {
         return year;
     }
 
-    public int getMonth(){
+    public int getMonth() {
         return month;
     }
 
-    public int getDay(){
+    public int getDay() {
         return day;
     }
 
-    public String toString(){
-        int dayWeek = getDayOfWeek(getYear(),getMonth(),getDay());
-        return String.format("%s %d %s %d", DAYS[dayWeek], getDay(), MONTHS[getMonth()-1], getYear());
+    // Method to format the date as specified
+    public String toString() {
+        int dayWeek = getDayOfWeek(getYear(), getMonth(), getDay());
+        return String.format("%s %d %s %d", DAYS[dayWeek], getDay(), MONTHS[getMonth() - 1], getYear());
     }
 
-    public String nextDay(){
+    // Method to get the next day
+    public MyDate nextDay() {
         this.day += 1;
-        if (isLeapYear(year) == true){
-            DAYS_IN_MONTHS[1] = 29;
+
+        // Adjust February's day if it's a leap year
+        if (getMonth() == 2 && isLeapYear(year)) {
+            if (this.day > 29) {
+                this.day = 1;
+                nextMonth();
+            }
+        } else if (this.day > DAYS_IN_MONTHS[getMonth() - 1]) {   // Increment the day by 1 if it's the last day of the month
+            this.day = 1;
+            nextMonth();
         }
-        if (day > DAYS_IN_MONTHS[getMonth()-1]){   // if its the last day of that month
-            day = 1;        // 1 since it's the start of all months
-            nextMonth();    // checks and adds to month value
-        }
-        return toString();
+        return this;
     }
 
-    public String nextMonth(){
+    // Method to get the next month
+    public MyDate nextMonth() {
         this.month += 1;
-        if (getMonth() >= 12){  // for decembers
+        if (this.month > 12) {  // for December
             this.month = 1;
-             year += 1;
+            nextYear();
         }
-        // if (getDay() == DAYS_IN_MONTHS[getMonth()-1]){  
-        //     day = DAYS_IN_MONTHS[getMonth()-1];        
-        // }
-            
-        return toString();
+        return this;
     }
 
-    public String nextYear(){
+    // Method to get the next year
+    public MyDate nextYear() {
         this.year += 1;
-        if (year > 9999){
+        if (year > 9999) {
             throw new IllegalArgumentException("Year out of range!");
         }
-        return toString();
+        return this;
     }
 
-    public String previousDay(){
+    // Method to get the previous day
+    public MyDate previousDay() {
         this.day -= 1;
-        if (day < 1){   // if day is slready at 1
-            this.day = DAYS_IN_MONTHS[getMonth()-1]; // gives value of last day to this.day
-            previousMonth();    // checks and adds to month value
-            if (getMonth() == MONTHS.length){
-                previousYear();
-            } // if end
-        } // if end
-        return toString();
+        if (this.day < 1) {   // If day is already at 1
+            previousMonth();    // Decrement the month value
+            this.day = DAYS_IN_MONTHS[getMonth() - 1]; // Give value of last day to this.day
+        }
+        return this;
     }
 
-    public String previousMonth(){
+    // Method to get the previous month
+    public MyDate previousMonth() {
         this.month -= 1;
-        if (this.month == 0){
-            this.month = MONTHS.length;
+        if (this.month == 0) {
+            this.month = 12;
+            previousYear();
         }
-        if (getDay() > DAYS_IN_MONTHS[getMonth()-1]){
-            this.day = DAYS_IN_MONTHS[getMonth()-1];
+        if (this.day > DAYS_IN_MONTHS[getMonth() - 1]) {
+            this.day = DAYS_IN_MONTHS[getMonth() - 1];
         }
-            return toString();
+        return this;
     }
 
-    public String previousYear(){
+    // Method to get the previous year
+    public MyDate previousYear() {
         this.year -= 1;
-        if (isLeapYear(year) == false && getMonth() == 2){
-            DAYS_IN_MONTHS[getMonth()-1] = 28;                
-            this.day = DAYS_IN_MONTHS[getMonth()-1];
+        if (!isLeapYear(year) && getMonth() == 2 && getDay() == 29) {
+            this.day = 28;
         }
-        return toString();
+        return this;
     }
-} // public class end
+} 

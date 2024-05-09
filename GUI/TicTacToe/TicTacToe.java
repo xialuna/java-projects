@@ -12,9 +12,9 @@ public class TicTacToe {
     JButton restartBtn = new JButton("RESTART");
 
     // Strings representing player marks
-    String playerX = "X";
-    String playerO = "O";
-    String currentPlayer = playerX;
+    ImageIcon playerX= new ImageIcon("D:\\Java Projects\\GUI\\TicTacToe\\x-icon.png");
+    ImageIcon playerO = new ImageIcon("D:\\\\Java Projects\\\\GUI\\\\TicTacToe\\\\o-icon.png");
+    ImageIcon currentPlayer = playerX;
 
     public TicTacToe() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,7 +48,7 @@ public class TicTacToe {
                 box.setBackground(Color.white);
                 box.setBorderPainted(false); // Remove border
                 box.setFocusable(false);
-                box.setText(currentPlayer);
+                box.setIcon(currentPlayer);
                 boardPanel.add(box);
                 
             }

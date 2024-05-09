@@ -24,6 +24,7 @@ public class TicTacToe {
         textLabel.setHorizontalAlignment(JLabel.CENTER); //center text
 
         textPanel.setLayout(new BorderLayout());
+        textPanel.setBorder(BorderFactory.createEmptyBorder(41,0,41,0));
         textPanel.add(textLabel); //add text label to text panel
         frame.add(textPanel, BorderLayout.NORTH); //add text panel to frame and put it at the top
         frame.validate(); // Validate the frame after adding components

@@ -53,36 +53,47 @@ public class Grade extends JFrame implements ActionListener{
         boolean validPrelims = false;
         boolean validMidterm = false;
         boolean validFinals = false;
-        if(e.getSource() == btnCompute){
-            double prelims = Double.parseDouble(txtPrelims.getText()); //assign inputted textField and convert to double
-            validPrelims = (prelims >= 1 && prelims <= 100)? true : false;
 
-            double midterm = Double.parseDouble(txtMidterm.getText()); 
-            validMidterm = (midterm >= 1 && midterm <= 100)? true : false;
-
-            double finals = Double.parseDouble(txtFinals.getText()); 
-            validFinals = (finals >= 1 && finals <= 100)? true : false;
-
-            if (validPrelims == true && validMidterm == true && validFinals == true){
-                double finalRating = (prelims * 0.30) + (midterm * 0.30) + (finals * 0.40);
-                txtRating.setText(finalRating + "");//turn finalRating into string
-
-                if (finalRating >= 75){
-                    txtStatus.setText("PASSED");
-                }else{
-                    txtStatus.setText("FAILED");
+        try{
+            if(e.getSource() == btnCompute){
+                double prelims = Double.parseDouble(txtPrelims.getText()); //assign inputted textField and convert to double
+                validPrelims = (prelims >= 1 && prelims <= 100)? true : false;
+    
+                double midterm = Double.parseDouble(txtMidterm.getText()); 
+                validMidterm = (midterm >= 1 && midterm <= 100)? true : false;
+    
+                double finals = Double.parseDouble(txtFinals.getText()); 
+                validFinals = (finals >= 1 && finals <= 100)? true : false;
+    
+                if (validPrelims == true && validMidterm == true && validFinals == true){
+                    double finalRating = (prelims * 0.30) + (midterm * 0.30) + (finals * 0.40);
+                    txtRating.setText(finalRating + "");//turn finalRating into string
+    
+                    if (finalRating >= 75){
+                        txtStatus.setText("PASSED");
+                    }else{
+                        txtStatus.setText("FAILED");
+                    }
                 }
+                
             }
-            
-        }
-
-        if (e.getSource() == btnClear){
+    
+            if (e.getSource() == btnClear){
+                txtPrelims.setText("");
+                txtMidterm.setText("");
+                txtFinals.setText("");
+                txtRating.setText("");
+                txtStatus.setText("");
+            }
+        }catch(NumberFormatException er){
+            JOptionPane.showMessageDialog(null, "Please enter a valid number!","Invalid Input", JOptionPane.ERROR_MESSAGE);
             txtPrelims.setText("");
             txtMidterm.setText("");
             txtFinals.setText("");
             txtRating.setText("");
             txtStatus.setText("");
         }
+        
     }
     public static void main(String[] args){
         Grade app = new Grade();

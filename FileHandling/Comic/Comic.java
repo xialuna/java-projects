@@ -9,8 +9,8 @@ public class Comic extends JFrame {
 
     Comic() {
         setTitle("Comic Database");
-        setSize(600,600);
-        setLayout(new FlowLayout());
+        setSize(500,400);
+        setLayout(new BorderLayout());
 
         titlePanel = new JPanel();
         titlePanel.setLayout(new GridLayout(2,1));
@@ -18,10 +18,10 @@ public class Comic extends JFrame {
         subheading = new JLabel("Summary Report of File", SwingConstants.CENTER);
         titlePanel.add(heading);
         titlePanel.add(subheading);
-        add(titlePanel);
+        add(titlePanel, BorderLayout.NORTH);
 
         countPanel = new JPanel();
-        countPanel.setLayout(new GridLayout(4,2));
+        countPanel.setLayout(new GridLayout(4,2,5,5));
 
         lblTot = new JLabel("Total number of records read: ");
         txtTot = new JTextField();
@@ -48,7 +48,7 @@ public class Comic extends JFrame {
         countPanel.add(txtIndicated);
 
         charPanel = new JPanel();
-        charPanel.setLayout(new GridLayout(3,2));
+        charPanel.setLayout(new GridLayout(3,2,5,5));
 
         lblGood= new JLabel("Good characters: ");
         txtGood = new JTextField();

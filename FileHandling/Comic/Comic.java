@@ -3,68 +3,82 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Comic extends JFrame {
-    JPanel headingPanel, bodyPanel;
-    JLabel title, subTitle, totLabel, maleLabel, femaleLabel, notIndicatedLabel, goodLabel, badLabel, neutralLabel;
-    TextField txtTot, txtMale, txtFemale, txtNotIndicated, txtGood, txtBad, txtNeutral;
+    JLabel heading,subheading, lblTot, lblMale, lblFemale, lblIndicated, lblGood, lblBad, lblNeutral;
+    JTextField txtTot, txtMale, txtFemale, txtIndicated, txtGood, txtBad, txtNeutral;
+    JPanel titlePanel, countPanel, charPanel, bodyPanel;
 
     Comic() {
-        setTitle("DC Wikia Comic Characters");
-        headingPanel = new JPanel();
-        title = new JLabel("DC Wikia Comic Characters\n");
-        subTitle = new JLabel("Summary Report of File");
-        headingPanel.add(title);
-        headingPanel.add(subTitle);
-        add(headingPanel,BorderLayout.NORTH);
+        setTitle("Comic Database");
+        setSize(600,600);
+        setLayout(new FlowLayout());
 
-        totLabel = new JLabel("Total number of records read: ");
-        maleLabel = new JLabel("Number of male characters: ");
-        femaleLabel = new JLabel("Number of female characters: ");
-        notIndicatedLabel = new JLabel("Not Indicated: ");
-        goodLabel = new JLabel("Good Characters: ");
-        badLabel = new JLabel("Bad Characters: ");
-        neutralLabel = new JLabel("Neutral Characters: ");
+        titlePanel = new JPanel();
+        titlePanel.setLayout(new GridLayout(2,1));
+        heading = new JLabel("DC Wikia Comic Characters", SwingConstants.CENTER);
+        subheading = new JLabel("Summary Report of File", SwingConstants.CENTER);
+        titlePanel.add(heading);
+        titlePanel.add(subheading);
+        add(titlePanel);
 
-        txtTot = new TextField("",12);
+        countPanel = new JPanel();
+        countPanel.setLayout(new GridLayout(4,2));
+
+        lblTot = new JLabel("Total number of records read: ");
+        txtTot = new JTextField();
         txtTot.setEditable(false);
-        txtMale = new TextField("",12);
+        countPanel.add(lblTot);
+        countPanel.add(txtTot);
+
+        lblMale = new JLabel("Number of male characters: ");
+        txtMale = new JTextField();
         txtMale.setEditable(false);
-        txtFemale = new TextField("",12);
+        countPanel.add(lblMale);
+        countPanel.add(txtMale);
+
+        lblFemale = new JLabel("Number of female characters: ");
+        txtFemale = new JTextField();
         txtFemale.setEditable(false);
-        txtNotIndicated = new TextField("",12);
-        txtNotIndicated.setEditable(false);
-        txtGood = new TextField("",12);
+        countPanel.add(lblFemale);
+        countPanel.add(txtFemale);
+
+        lblIndicated = new JLabel("Not Indicated: ");
+        txtIndicated = new JTextField();
+        txtIndicated.setEditable(false);
+        countPanel.add(lblIndicated);
+        countPanel.add(txtIndicated);
+
+        charPanel = new JPanel();
+        charPanel.setLayout(new GridLayout(3,2));
+
+        lblGood= new JLabel("Good characters: ");
+        txtGood = new JTextField();
         txtGood.setEditable(false);
-        txtBad = new TextField("",12);
+        charPanel.add(lblGood);
+        charPanel.add(txtGood);
+
+        lblBad= new JLabel("Bad characters: ");
+        txtBad = new JTextField();
         txtBad.setEditable(false);
-        txtNeutral = new TextField("",12);
+        charPanel.add(lblBad);
+        charPanel.add(txtBad);
+
+        lblNeutral= new JLabel("Neutral characters: ");
+        txtNeutral = new JTextField();
         txtNeutral.setEditable(false);
+        charPanel.add(lblNeutral);
+        charPanel.add(txtNeutral);
 
         bodyPanel = new JPanel();
-        bodyPanel.setLayout(new GridLayout(7,0,2,2));
-        bodyPanel.add(totLabel);
-        bodyPanel.add(txtTot);
-        bodyPanel.add(maleLabel);
-        bodyPanel.add(txtMale);
-        bodyPanel.add(femaleLabel );
-        bodyPanel.add(txtFemale);
-        bodyPanel.add(notIndicatedLabel);
-        bodyPanel.add(txtNotIndicated);
-        bodyPanel.add(goodLabel);
-        bodyPanel.add(txtGood);
-        bodyPanel.add(badLabel );
-        bodyPanel.add(txtBad);
-        bodyPanel.add(neutralLabel);
-        bodyPanel.add(txtNeutral);
-
+        bodyPanel.setLayout(new GridLayout(2,1,10,20));
+        bodyPanel.add(countPanel);
+        bodyPanel.add(charPanel);
         add(bodyPanel);
 
-
-        setSize(600,600);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     public static void main(String[] args){
         Comic comic = new Comic();
+        comic.setDefaultCloseOperation(EXIT_ON_CLOSE);
         comic.setVisible(true);
 
     }

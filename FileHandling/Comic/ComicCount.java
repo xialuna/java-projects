@@ -132,7 +132,7 @@ public class ComicCount extends JFrame {
 
     public static void main(String[] args){
         ComicCount comic = new ComicCount();
-        comic.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        comic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         comic.setVisible(true);
 
     }

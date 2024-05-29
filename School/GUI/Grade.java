@@ -74,6 +74,8 @@ public class Grade extends JFrame implements ActionListener{
                     }else{
                         txtStatus.setText("FAILED");
                     }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number (1 to 100)!","Invalid Input", JOptionPane.ERROR_MESSAGE);
                 }
                 
             }

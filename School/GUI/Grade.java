@@ -73,11 +73,10 @@ public class Grade extends JFrame implements ActionListener{
                     txtStatus.setText("FAILED");
                 }
             }
-
             
         }
 
-        if (e.getSource() == btnCompute){
+        if (e.getSource() == btnClear){
             txtPrelims.setText("");
             txtMidterm.setText("");
             txtFinals.setText("");

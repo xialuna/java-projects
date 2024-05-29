@@ -3,12 +3,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
-public class Comic extends JFrame {
+public class ComicCount extends JFrame {
     JLabel heading,subheading, lblTot, lblMale, lblFemale, lblIndicated, lblGood, lblBad, lblNeutral;
     JTextField txtTot, txtMale, txtFemale, txtIndicated, txtGood, txtBad, txtNeutral;
     JPanel titlePanel, countPanel, charPanel, bodyPanel;
 
-    Comic() {
+    ComicCount() {
         setTitle("Comic Database");
         setSize(500,400);
         setLayout(new BorderLayout());
@@ -132,7 +132,7 @@ public class Comic extends JFrame {
     }
 
     public static void main(String[] args){
-        Comic comic = new Comic();
+        ComicCount comic = new ComicCount();
         comic.setDefaultCloseOperation(EXIT_ON_CLOSE);
         comic.setVisible(true);
 

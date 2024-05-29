@@ -90,6 +90,7 @@ public class Comic extends JFrame {
                 totalRecords++;
                 String[] word = line.split("\\s+");// Split by whitespace
                 int gender = Integer.parseInt(word[5]); //Since gender is  the 6th element in each line
+                //count occurences in each gender
                 switch(gender){
                     case 1:
                         maleCount++;
@@ -102,7 +103,8 @@ public class Comic extends JFrame {
                         break;
                 }
             
-                int align = Integer.parseInt(word[2]);
+                int align = Integer.parseInt(word[2]); //Since align is the 3rd element on the line
+                //count occurences in each align
                 switch(align){
                     case 1:
                         goodCount++;

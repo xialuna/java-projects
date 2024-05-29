@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
 public class Comic extends JFrame {
     JLabel heading,subheading, lblTot, lblMale, lblFemale, lblIndicated, lblGood, lblBad, lblNeutral;
@@ -74,6 +75,58 @@ public class Comic extends JFrame {
         bodyPanel.add(charPanel);
         add(bodyPanel);
 
+        int totalRecords = 0;
+        int maleCount = 0;
+        int femaleCount = 0;
+        int notStatedCount = 0;
+        int goodCount = 0;
+        int badCount = 0;
+        int neutralCount = 0;
+
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader("test.txt"));
+            String line;
+            while((line = reader.readLine()) != null){
+                totalRecords++;
+                String[] word = line.split("\\s+");// Split by whitespace
+                int gender = Integer.parseInt(word[5]); //Since gender is  the 6th element in each line
+                switch(gender){
+                    case 1:
+                        maleCount++;
+                        break;
+                    case 2:
+                        femaleCount++;
+                        break;
+                    case 0:
+                        notStatedCount++;
+                        break;
+                }
+            
+                int align = Integer.parseInt(word[2]);
+                switch(align){
+                    case 1:
+                        goodCount++;
+                        break;
+                    case 2:
+                        badCount++;
+                        break;
+                    case 3:
+                        neutralCount++;
+                        break;
+                }
+
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        txtTot.setText(totalRecords+"");
+        txtMale.setText(maleCount+"");
+        txtFemale.setText(femaleCount+"");
+        txtIndicated.setText(notStatedCount+"");
+        txtGood.setText(goodCount+"");
+        txtBad.setText(badCount+"");
+        txtNeutral.setText(neutralCount+"");
     }
 
     public static void main(String[] args){

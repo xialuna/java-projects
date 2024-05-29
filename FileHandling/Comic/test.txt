@@ -2,4 +2,4 @@
 118753 0 1 Blue Unknown 2 1 10 1989 500-ZQ
 138271 1 2 Red Unknown 1 1 6 1997 A-Mortal 
 240274 0 1 Blue Blond 1 1 8 1995 A.J.
-70693 2 1 Blue Purple 2 2 0 1981 A'Hwiirdh-Paan'
+70693 2 1 Blue Purple 0 2 0 1981 A'Hwiirdh-Paan'

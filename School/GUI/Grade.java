@@ -7,7 +7,7 @@ public class Grade extends JFrame implements ActionListener{
     JTextField txtPrelims, txtMidterm, txtFinals, txtRating, txtStatus;
     JButton btnCompute, btnClear;
        
-    Grade(){
+    Grade(){// Constructor for Grade class
         setTitle("Computation of Grades");
         setSize(400,300);
         setLayout(new GridLayout(6,2, 5, 5));
@@ -45,6 +45,7 @@ public class Grade extends JFrame implements ActionListener{
         add(btnCompute);
         add(btnClear);
 
+        // Add action listeners to the buttons
         btnCompute.addActionListener(this);
         btnClear.addActionListener(this);
     }
@@ -54,8 +55,9 @@ public class Grade extends JFrame implements ActionListener{
         boolean validMidterm = false;
         boolean validFinals = false;
 
-        try{
-            if(e.getSource() == btnCompute){
+        try{// For exception handling (ex: if user inputs a non-number)
+            if(e.getSource() == btnCompute){ // If Compute button is clicked
+                //Parse and validate prelims, midterm, final values
                 double prelims = Double.parseDouble(txtPrelims.getText()); //assign inputted textField and convert to double
                 validPrelims = (prelims >= 1 && prelims <= 100)? true : false;
     
@@ -65,21 +67,25 @@ public class Grade extends JFrame implements ActionListener{
                 double finals = Double.parseDouble(txtFinals.getText()); 
                 validFinals = (finals >= 1 && finals <= 100)? true : false;
     
+                // If all inputs are valid, calculate final rating and status
                 if (validPrelims == true && validMidterm == true && validFinals == true){
                     double finalRating = (prelims * 0.30) + (midterm * 0.30) + (finals * 0.40);
                     txtRating.setText(finalRating + "");//turn finalRating into string
     
+                    // Set status based on final rating
                     if (finalRating >= 75){
                         txtStatus.setText("PASSED");
                     }else{
                         txtStatus.setText("FAILED");
                     }
                 }else{
+                    // Show error message if inputs are invalid
                     JOptionPane.showMessageDialog(null, "Please enter a valid number (1 to 100)!","Invalid Input", JOptionPane.ERROR_MESSAGE);
                 }
                 
             }
     
+            // If Clear button is clicked, clear all text fields
             if (e.getSource() == btnClear){
                 txtPrelims.setText("");
                 txtMidterm.setText("");
@@ -88,7 +94,9 @@ public class Grade extends JFrame implements ActionListener{
                 txtStatus.setText("");
             }
         }catch(NumberFormatException er){
+             // Show error message if input is not a number
             JOptionPane.showMessageDialog(null, "Please enter a valid number!","Invalid Input", JOptionPane.ERROR_MESSAGE);
+            // Clear all text fields
             txtPrelims.setText("");
             txtMidterm.setText("");
             txtFinals.setText("");

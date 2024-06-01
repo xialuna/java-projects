@@ -5,7 +5,7 @@ import java.awt.event.*;
 public class Telephone extends JFrame {
     JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone;
     TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone;
-    JButton btnCreate, btnUpdate, btnDelete;
+    JButton btnCreate, btnUpdate, btnDelete, btnClear;
     JPanel panelName, panelAddress, panelTelephone, panelButtons, panelCRUD, panelTable;
     Telephone(){
         setTitle("Telephone Directory CRUD Application");
@@ -63,10 +63,26 @@ public class Telephone extends JFrame {
         panelTelephone.add(lblTelephone);
         panelTelephone.add(txtTelephone);
 
+        btnCreate = new JButton("Create");
+        btnUpdate = new JButton("Update");
+        btnDelete= new JButton("Delete");
+        btnClear = new JButton("Clear");
+
+        JButton[] buttons = {btnCreate, btnUpdate, btnDelete, btnClear};
+        // Set the same font for all buttons in one line
+        for (JButton button : buttons) {
+            button.setFont(fontDefault);
+            // button.setPreferredSize(new Dimension(115, 44));
+            button.setBorderPainted(false);
+            button.setFocusable(false);
+            panelButtons.add(button);
+        }
+
         panelCRUD.add(lblHeading);
         panelCRUD.add(panelName);
         panelCRUD.add(panelAddress);
         panelCRUD.add(panelTelephone);
+        panelCRUD.add(panelButtons);
 
         add(panelCRUD);
         // add(panelTable);

@@ -33,8 +33,24 @@ public class Telephone extends JFrame {
         txtName = new TextField("", 20);
         panelName.add(lblName);
         panelName.add(txtName);
+
+        lblAddress = new JLabel("Address: ");
+        lblAddress.setFont(fontDefault);
+        txtAddress = new TextField("", 20);
+        panelAddress.add(lblAddress);
+        panelAddress.add(txtAddress);
+
+        lblTelephone = new JLabel("Telephone Number: ");
+        lblTelephone.setFont(fontDefault);
+        txtTelephone = new TextField("", 20);
+        panelTelephone.add(lblTelephone);
+        panelTelephone.add(txtTelephone);
+
         
         panelCRUD.add(panelName);
+        panelCRUD.add(panelAddress);
+        panelCRUD.add(panelTelephone);
+
         add(panelCRUD);
         // add(panelTable);
     }

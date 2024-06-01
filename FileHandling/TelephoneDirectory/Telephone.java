@@ -1,12 +1,15 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.*;
 
 public class Telephone extends JFrame {
-    JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone;
-    TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone;
-    JButton btnCreate, btnUpdate, btnDelete, btnClear;
-    JPanel panelName, panelAddress, panelTelephone, panelButtons, panelCRUD, panelTable;
+    JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone, lblSearch;
+    TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone,txtSearch;
+    JButton btnCreate, btnUpdate, btnDelete, btnClear, btnSearch;
+    JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelInput, panelCRUD, panelTable;
     Telephone(){
         setTitle("Telephone Directory CRUD Application");
         setSize(1212,700);
@@ -14,35 +17,42 @@ public class Telephone extends JFrame {
         setLocationRelativeTo(null);
 
         panelCRUD = new JPanel();
+        panelInput = new JPanel();
         panelTable = new JPanel();
         panelName = new JPanel();
         panelAddress = new JPanel();
         panelTelephone = new JPanel();
         panelButtons = new JPanel();
+        panelSearch = new JPanel();
 
-        panelCRUD.setLayout(new GridLayout(5,1,10,10));
-        panelTable.setLayout(new GridLayout(2,1,10,10));
+        panelCRUD.setLayout(new BorderLayout());
+        panelInput.setLayout(new GridLayout(4,1,10,10));
+        panelTable.setLayout(new BorderLayout());
         panelName.setLayout(new GridLayout(2,3,10,10));
         panelAddress.setLayout(new GridLayout(2,1,5,5));
         panelTelephone.setLayout(new GridLayout(2,1,5,5));
         panelButtons.setLayout(new GridLayout(1,4,10,10));
+        panelSearch.setLayout(new GridLayout(2,1,10,10));
 
         lblHeading = new JLabel("Telephone Directory");
         lblHeading.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 30));
 
-        Font fontDefault = new Font ("Microsoft JhengHei UI", Font.PLAIN, 16);
+        Font fontDefault = new Font ("Microsoft JhengHei UI", Font.PLAIN, 18);
 
         lblFirstName = new JLabel("First Name: ");
-        lblFirstName.setFont(fontDefault);
         txtFirstName = new TextField("", 10);
+        lblFirstName.setFont(fontDefault);
+        txtFirstName.setFont(fontDefault);
 
         lblLastName = new JLabel("Last Name: ");
-        lblLastName.setFont(fontDefault);
         txtLastName = new TextField("", 10);
+        lblLastName.setFont(fontDefault);
+        txtLastName.setFont(fontDefault);
 
         lblMiddleIN = new JLabel("MI: ");
-        lblMiddleIN.setFont(fontDefault);
         txtMiddleIN = new TextField("", 10);
+        lblMiddleIN.setFont(fontDefault);
+        txtMiddleIN.setFont(fontDefault);
         
         panelName.add(lblFirstName);
         panelName.add(lblLastName);
@@ -52,16 +62,23 @@ public class Telephone extends JFrame {
         panelName.add(txtMiddleIN);
 
         lblAddress = new JLabel("Address: ");
-        lblAddress.setFont(fontDefault);
         txtAddress = new TextField("", 20);
+        lblAddress.setFont(fontDefault);
+        txtAddress.setFont(fontDefault);
         panelAddress.add(lblAddress);
         panelAddress.add(txtAddress);
 
         lblTelephone = new JLabel("Telephone Number: ");
-        lblTelephone.setFont(fontDefault);
         txtTelephone = new TextField("", 20);
+        lblTelephone.setFont(fontDefault);
+        txtTelephone.setFont(fontDefault);
         panelTelephone.add(lblTelephone);
         panelTelephone.add(txtTelephone);
+
+        panelInput.add(lblHeading);
+        panelInput.add(panelName);
+        panelInput.add(panelAddress);
+        panelInput.add(panelTelephone);
 
         btnCreate = new JButton("Create");
         btnUpdate = new JButton("Update");
@@ -78,19 +95,67 @@ public class Telephone extends JFrame {
             panelButtons.add(button);
         }
 
-        panelCRUD.add(lblHeading);
-        panelCRUD.add(panelName);
-        panelCRUD.add(panelAddress);
-        panelCRUD.add(panelTelephone);
-        panelCRUD.add(panelButtons);
+        panelCRUD.add(panelInput, BorderLayout.NORTH);
+        panelCRUD.add(panelButtons, BorderLayout.SOUTH);
 
-        add(panelCRUD);
-        // add(panelTable);
+        lblSearch = new JLabel("Search By Telephone: ");
+        txtSearch = new TextField("", 20);
+        lblSearch.setFont(fontDefault);
+        txtSearch.setFont(fontDefault);
+        panelSearch.add(lblSearch);
+        panelSearch.add(txtSearch);
+
+         // Sample data for the table
+        Object[][] data = {
+                {"John Doe", "123 Main St", "09067265123"},
+                {"Jane Smith", "456 Elm St", "09067265123"},
+                {"Bob Johnson", "789 Oak St", "090672651234"},
+                {"Alice Williams", "101 Pine St", "09067265123"},
+                // Add more rows as needed
+        };
+
+        // Column names for the table
+        String[] columnNames = {"Name", "Address", "Telephone"};
+
+        // Create a table model
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+
+        // Create a JTable with the model
+        JTable table = new JTable(model) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make cells non-editable
+            }
+        };
+
+        // Set up custom cell renderer for alternating row colors
+        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground((row % 2 == 0)? Color.WHITE: new Color(0xF2F2F2));
+                return c;
+            }
+        });
+
+        table.setRowSelectionAllowed(false); // Disable row selection
+        table.getTableHeader().setReorderingAllowed(false); // Disable column reordering
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        // scrollPane.setPreferredSize(new Dimension(545, 469));
+        scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
+
+        panelTable.add(panelSearch, BorderLayout.NORTH);
+        panelTable.add(scrollPane, BorderLayout.SOUTH);
+
+
+        add(panelCRUD, BorderLayout.WEST);
+        add(panelTable, BorderLayout.EAST);
     }
     public static void main(String[] args){
-        Telephone comic = new Telephone();
-        comic.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        comic.setVisible(true);
+        Telephone app = new Telephone();
+        app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        app.setVisible(true);
 
     }
 }

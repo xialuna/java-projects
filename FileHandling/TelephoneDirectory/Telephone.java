@@ -9,7 +9,7 @@ public class Telephone extends JFrame {
     JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone, lblSearch;
     TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone,txtSearch;
     JButton btnCreate, btnUpdate, btnDelete, btnClear, btnSearch;
-    JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelInput, panelCRUD, panelTable;
+    JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
     Telephone(){
         setTitle("Telephone Directory CRUD Application");
         setSize(1212,700);
@@ -24,35 +24,39 @@ public class Telephone extends JFrame {
         panelTelephone = new JPanel();
         panelButtons = new JPanel();
         panelSearch = new JPanel();
+        panelSearchWhole = new JPanel();
 
         panelCRUD.setLayout(new BorderLayout());
-        panelInput.setLayout(new GridLayout(4,1,10,10));
+        panelInput.setLayout(new GridLayout(4,1,10,30));
         panelTable.setLayout(new BorderLayout());
         panelName.setLayout(new GridLayout(2,3,10,10));
         panelAddress.setLayout(new GridLayout(2,1,5,5));
         panelTelephone.setLayout(new GridLayout(2,1,5,5));
         panelButtons.setLayout(new GridLayout(1,4,10,10));
-        panelSearch.setLayout(new GridLayout(2,1,10,10));
+        panelSearchWhole.setLayout(new GridLayout(2,1));
+        panelSearch.setLayout(new FlowLayout(FlowLayout.LEFT, 10,5));
 
         lblHeading = new JLabel("Telephone Directory");
         lblHeading.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 30));
 
-        Font fontDefault = new Font ("Microsoft JhengHei UI", Font.PLAIN, 18);
+        Font inputFont = new Font ("Microsoft JhengHei UI", Font.PLAIN, 18);
+        Font textFont  = new Font ("Microsoft JhengHei UI", Font.PLAIN, 16);
+        Font btnFont  = new Font ("Microsoft JhengHei UI", Font.PLAIN, 14);
 
         lblFirstName = new JLabel("First Name: ");
         txtFirstName = new TextField("", 10);
-        lblFirstName.setFont(fontDefault);
-        txtFirstName.setFont(fontDefault);
+        lblFirstName.setFont(textFont);
+        txtFirstName.setFont(inputFont);
 
         lblLastName = new JLabel("Last Name: ");
         txtLastName = new TextField("", 10);
-        lblLastName.setFont(fontDefault);
-        txtLastName.setFont(fontDefault);
+        lblLastName.setFont(textFont);
+        txtLastName.setFont(inputFont);
 
         lblMiddleIN = new JLabel("MI: ");
         txtMiddleIN = new TextField("", 10);
-        lblMiddleIN.setFont(fontDefault);
-        txtMiddleIN.setFont(fontDefault);
+        lblMiddleIN.setFont(textFont);
+        txtMiddleIN.setFont(inputFont);
         
         panelName.add(lblFirstName);
         panelName.add(lblLastName);
@@ -63,15 +67,15 @@ public class Telephone extends JFrame {
 
         lblAddress = new JLabel("Address: ");
         txtAddress = new TextField("", 20);
-        lblAddress.setFont(fontDefault);
-        txtAddress.setFont(fontDefault);
+        lblAddress.setFont(textFont);
+        txtAddress.setFont(inputFont);
         panelAddress.add(lblAddress);
         panelAddress.add(txtAddress);
 
         lblTelephone = new JLabel("Telephone Number: ");
         txtTelephone = new TextField("", 20);
-        lblTelephone.setFont(fontDefault);
-        txtTelephone.setFont(fontDefault);
+        lblTelephone.setFont(textFont);
+        txtTelephone.setFont(inputFont);
         panelTelephone.add(lblTelephone);
         panelTelephone.add(txtTelephone);
 
@@ -84,13 +88,13 @@ public class Telephone extends JFrame {
         btnUpdate = new JButton("Update");
         btnDelete= new JButton("Delete");
         btnClear = new JButton("Clear");
+        btnSearch = new JButton("Search");
 
-        JButton[] buttons = {btnCreate, btnUpdate, btnDelete, btnClear};
-        // Set the same font for all buttons in one line
+        JButton[] buttons = {btnCreate, btnUpdate, btnDelete, btnClear, btnSearch};
+        // Set the same font for all buttons 
         for (JButton button : buttons) {
-            button.setFont(fontDefault);
+            button.setFont(btnFont);
             // button.setPreferredSize(new Dimension(115, 44));
-            button.setBorderPainted(false);
             button.setFocusable(false);
             panelButtons.add(button);
         }
@@ -99,11 +103,15 @@ public class Telephone extends JFrame {
         panelCRUD.add(panelButtons, BorderLayout.SOUTH);
 
         lblSearch = new JLabel("Search By Telephone: ");
-        txtSearch = new TextField("", 20);
-        lblSearch.setFont(fontDefault);
-        txtSearch.setFont(fontDefault);
-        panelSearch.add(lblSearch);
+        txtSearch = new TextField("", 30);
+        lblSearch.setFont(textFont);
+        txtSearch.setFont(inputFont);
+
         panelSearch.add(txtSearch);
+        panelSearch.add(btnSearch);
+        panelSearchWhole.add(lblSearch);
+        panelSearchWhole.add(panelSearch);
+        
 
          // Sample data for the table
         Object[][] data = {
@@ -145,7 +153,7 @@ public class Telephone extends JFrame {
         // scrollPane.setPreferredSize(new Dimension(545, 469));
         scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
 
-        panelTable.add(panelSearch, BorderLayout.NORTH);
+        panelTable.add(panelSearchWhole, BorderLayout.NORTH);
         panelTable.add(scrollPane, BorderLayout.SOUTH);
 
 

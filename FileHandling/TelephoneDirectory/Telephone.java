@@ -22,7 +22,7 @@ public class Telephone extends JFrame {
 
         panelCRUD.setLayout(new GridLayout(5,1,10,10));
         panelTable.setLayout(new GridLayout(2,1,10,10));
-        panelName.setLayout(new GridLayout(2,3,5,5));;
+        panelName.setLayout(new GridLayout(2,3,10,10));
         panelAddress.setLayout(new GridLayout(2,1,5,5));
         panelTelephone.setLayout(new GridLayout(2,1,5,5));
         panelButtons.setLayout(new GridLayout(1,4,10,10));
@@ -34,22 +34,22 @@ public class Telephone extends JFrame {
 
         lblFirstName = new JLabel("First Name: ");
         lblFirstName.setFont(fontDefault);
-        txtFirstName = new TextField("", 20);
-        panelName.add(lblFirstName);
-        panelName.add(txtFirstName);
+        txtFirstName = new TextField("", 10);
 
         lblLastName = new JLabel("Last Name: ");
         lblLastName.setFont(fontDefault);
-        txtLastName = new TextField("", 20);
-        panelName.add(lblLastName);
-        panelName.add(txtLastName);
+        txtLastName = new TextField("", 10);
 
         lblMiddleIN = new JLabel("MI: ");
         lblMiddleIN.setFont(fontDefault);
-        txtMiddleIN = new TextField("", 5);
+        txtMiddleIN = new TextField("", 10);
+        
+        panelName.add(lblFirstName);
+        panelName.add(lblLastName);
         panelName.add(lblMiddleIN);
+        panelName.add(txtFirstName);
+        panelName.add(txtLastName);
         panelName.add(txtMiddleIN);
-
 
         lblAddress = new JLabel("Address: ");
         lblAddress.setFont(fontDefault);

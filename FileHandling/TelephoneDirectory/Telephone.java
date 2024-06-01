@@ -3,11 +3,12 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Telephone extends JFrame {
-    JLabel lblHeading, lblName, lblAddress, lblTelephone;
-    TextField txtName, txtAddress, txtTelephone;
+    JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone;
+    TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone;
+    JButton btnCreate, btnUpdate, btnDelete;
     JPanel panelName, panelAddress, panelTelephone, panelButtons, panelCRUD, panelTable;
     Telephone(){
-        setTitle("Telephone Directory");
+        setTitle("Telephone Directory CRUD Application");
         setSize(1212,700);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -21,7 +22,7 @@ public class Telephone extends JFrame {
 
         panelCRUD.setLayout(new GridLayout(5,1,10,10));
         panelTable.setLayout(new GridLayout(2,1,10,10));
-        panelName.setLayout(new GridLayout(2,1,5,5));;
+        panelName.setLayout(new GridLayout(2,3,5,5));;
         panelAddress.setLayout(new GridLayout(2,1,5,5));
         panelTelephone.setLayout(new GridLayout(2,1,5,5));
         panelButtons.setLayout(new GridLayout(1,4,10,10));
@@ -30,12 +31,25 @@ public class Telephone extends JFrame {
         lblHeading.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 30));
 
         Font fontDefault = new Font ("Microsoft JhengHei UI", Font.PLAIN, 16);
-        
-        lblName = new JLabel("Full Name: ");
-        lblName.setFont(fontDefault);
-        txtName = new TextField("", 20);
-        panelName.add(lblName);
-        panelName.add(txtName);
+
+        lblFirstName = new JLabel("First Name: ");
+        lblFirstName.setFont(fontDefault);
+        txtFirstName = new TextField("", 20);
+        panelName.add(lblFirstName);
+        panelName.add(txtFirstName);
+
+        lblLastName = new JLabel("Last Name: ");
+        lblLastName.setFont(fontDefault);
+        txtLastName = new TextField("", 20);
+        panelName.add(lblLastName);
+        panelName.add(txtLastName);
+
+        lblMiddleIN = new JLabel("MI: ");
+        lblMiddleIN.setFont(fontDefault);
+        txtMiddleIN = new TextField("", 5);
+        panelName.add(lblMiddleIN);
+        panelName.add(txtMiddleIN);
+
 
         lblAddress = new JLabel("Address: ");
         lblAddress.setFont(fontDefault);

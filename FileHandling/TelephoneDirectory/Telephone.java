@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -12,6 +13,7 @@ public class Telephone extends JFrame {
     JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
     Telephone(){
         setTitle("Telephone Directory CRUD Application");
+        setLayout(new FlowLayout());
         setSize(1212,700);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -115,10 +117,10 @@ public class Telephone extends JFrame {
 
          // Sample data for the table
         Object[][] data = {
-                {"John Doe", "123 Main St", "09067265123"},
-                {"Jane Smith", "456 Elm St", "09067265123"},
-                {"Bob Johnson", "789 Oak St", "090672651234"},
-                {"Alice Williams", "101 Pine St", "09067265123"},
+                {"Abel, J. G.", "110 Oakleaf", "236-4010"},
+                {"Baker, Sue", "409 Sunset", "645-8978"},
+                {"Carter, L. H. ", "17 Bernary", "567-8766 "},
+                {"Minte, Al", "204 Pine", "356-2453"},
                 // Add more rows as needed
         };
 
@@ -153,12 +155,16 @@ public class Telephone extends JFrame {
         // scrollPane.setPreferredSize(new Dimension(545, 469));
         scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
 
+        panelButtons.setBorder(new EmptyBorder(20, 0,0,0));
+        panelSearch.setBorder(new EmptyBorder(0, 0,20,0));
+        panelCRUD.setBorder(new EmptyBorder(20, 20, 0, 20));
+        panelTable.setBorder(new EmptyBorder(20, 20, 0, 20));// padding for the whole panel
         panelTable.add(panelSearchWhole, BorderLayout.NORTH);
         panelTable.add(scrollPane, BorderLayout.SOUTH);
 
 
-        add(panelCRUD, BorderLayout.WEST);
-        add(panelTable, BorderLayout.EAST);
+        add(panelCRUD);
+        add(panelTable);
     }
     public static void main(String[] args){
         Telephone app = new Telephone();

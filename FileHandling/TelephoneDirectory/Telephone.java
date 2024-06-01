@@ -19,12 +19,15 @@ public class Telephone extends JFrame {
         panelTelephone = new JPanel();
         panelButtons = new JPanel();
 
-        panelCRUD.setLayout(new GridLayout(4,1,10,10));
+        panelCRUD.setLayout(new GridLayout(5,1,10,10));
         panelTable.setLayout(new GridLayout(2,1,10,10));
         panelName.setLayout(new GridLayout(2,1,5,5));;
         panelAddress.setLayout(new GridLayout(2,1,5,5));
         panelTelephone.setLayout(new GridLayout(2,1,5,5));
         panelButtons.setLayout(new GridLayout(1,4,10,10));
+
+        lblHeading = new JLabel("Telephone Directory");
+        lblHeading.setFont(new Font("Microsoft JhengHei UI", Font.BOLD, 30));
 
         Font fontDefault = new Font ("Microsoft JhengHei UI", Font.PLAIN, 16);
         
@@ -46,7 +49,7 @@ public class Telephone extends JFrame {
         panelTelephone.add(lblTelephone);
         panelTelephone.add(txtTelephone);
 
-        
+        panelCRUD.add(lblHeading);
         panelCRUD.add(panelName);
         panelCRUD.add(panelAddress);
         panelCRUD.add(panelTelephone);

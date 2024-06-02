@@ -121,6 +121,10 @@ public class Telephone extends JFrame {
                 {"Baker, Sue", "409 Sunset", "645-8978"},
                 {"Carter, L. H. ", "17 Bernary", "567-8766 "},
                 {"Minte, Al", "204 Pine", "356-2453"},
+                {"Abel, J. G.", "110 Oakleaf", "236-4010"},
+                {"Baker, Sue", "409 Sunset", "645-8978"},
+                {"Carter, L. H. ", "17 Bernary", "567-8766 "},
+
                 // Add more rows as needed
         };
 
@@ -150,18 +154,19 @@ public class Telephone extends JFrame {
 
         table.setRowSelectionAllowed(false); // Disable row selection
         table.getTableHeader().setReorderingAllowed(false); // Disable column reordering
+        table.getTableHeader().setBackground(new Color(0xC8D8E9));
 
         JScrollPane scrollPane = new JScrollPane(table);
-        // scrollPane.setPreferredSize(new Dimension(545, 469));
         scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getViewport().setBackground(Color.WHITE);
 
-        panelButtons.setBorder(new EmptyBorder(20, 0,0,0));
+        // padding for the whole panel
+        panelButtons.setBorder(new EmptyBorder(60, 0,0,0));
         panelSearch.setBorder(new EmptyBorder(0, 0,20,0));
         panelCRUD.setBorder(new EmptyBorder(20, 20, 0, 20));
-        panelTable.setBorder(new EmptyBorder(20, 20, 0, 20));// padding for the whole panel
+        panelTable.setBorder(new EmptyBorder(20, 20, 0, 20));
         panelTable.add(panelSearchWhole, BorderLayout.NORTH);
         panelTable.add(scrollPane, BorderLayout.SOUTH);
-
 
         add(panelCRUD);
         add(panelTable);

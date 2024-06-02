@@ -8,10 +8,10 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
-public class Telephone extends JFrame{
+public class Telephone extends JFrame implements ActionListener{
     private JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone, lblSearch;
     private TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone,txtSearch;
-    private JButton btnCreate, btnUpdate, btnDelete, btnClear, btnSearch;
+    private JButton btnInsert, btnUpdate, btnDelete, btnClear, btnSearch;
     private JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
     private File dataFile;
     Telephone(){
@@ -90,13 +90,13 @@ public class Telephone extends JFrame{
         panelInput.add(panelAddress);
         panelInput.add(panelTelephone);
 
-        btnCreate = new JButton("Create");
+        btnInsert = new JButton("Insert");
         btnUpdate = new JButton("Update");
         btnDelete= new JButton("Delete");
         btnClear = new JButton("Clear");
         btnSearch = new JButton("Search");
 
-        JButton[] buttons = {btnCreate, btnUpdate, btnDelete, btnClear, btnSearch};
+        JButton[] buttons = {btnInsert, btnUpdate, btnDelete, btnClear, btnSearch};
         // Set the same font for all buttons 
         for (JButton button : buttons) {
             button.setFont(btnFont);
@@ -105,11 +105,11 @@ public class Telephone extends JFrame{
             panelButtons.add(button);
         }
 
-        // btnCreate.addActionListener(this);
-        // btnUpdate.addActionListener(this);
-        // btnDelete.addActionListener(this);
-        // btnClear.addActionListener(this);
-        // btnSearch.addActionListener(this);
+        btnInsert.addActionListener(this);
+        btnUpdate.addActionListener(this);
+        btnDelete.addActionListener(this);
+        btnClear.addActionListener(this);
+        btnSearch.addActionListener(this);
 
         panelCRUD.add(panelInput, BorderLayout.NORTH);
         panelCRUD.add(panelButtons, BorderLayout.SOUTH);
@@ -126,24 +126,10 @@ public class Telephone extends JFrame{
 
         // Column names for the table
         String[] columnNames = {"Name", "Address", "Telephone"};
-        // Create a list to hold the data rows
-        List<String[]> data = new ArrayList<>();
-        
-        try{
-            BufferedReader br = new BufferedReader(new FileReader(dataFile));
-            String line;
-            while((line = br.readLine()) != null){
-                String[] columns = line.split("\\|");
-                if(columns.length == columnNames.length){
-                    data.add(columns);
-                }
-            }br.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+
 
         // Convert the list to a 2D array for the table model
-        String[][] dataArray = data.toArray(new String[0][]); //creates an empty array
+        String[][] dataArray = readFromFile(columnNames.length).toArray(new String[0][]); //creates an empty array
         
 
         // Create a table model
@@ -177,11 +163,57 @@ public class Telephone extends JFrame{
         add(panelTable);
     }
 
-    // public void ActionListener (ActionEvent e){
-    //     if (e.getSource() == btnUpdate){
+    public void actionPerformed (ActionEvent e){
+        if (e.getSource() == btnInsert){
+            String name = txtLastName.getText() + ", " + txtFirstName.getText() + " " + txtMiddleIN.getText();
+            String address = txtAddress.getText();
+            String telephone = txtAddress.getText();
+            String wholeData = name + "|" + address +"|" + telephone;
+            writeToFile(wholeData);
+            clearTxtFields();
 
-    //     }
+        }
+    }
+
+    private void writeToFile (String data){
+        try(FileWriter writer = new FileWriter("directory.txt", true)){
+            writer.write(data + "|");
+        }catch (IOException e) {
+            e.printStackTrace(); // If an IOException occurs, print the stack trace for debugging
+        }
+    }
+
+    private List<String[]> readFromFile(int namesLength){
+        // Create a list to hold the data rows
+        List<String[]> data = new ArrayList<>();
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(dataFile));
+            String line;
+            while((line = br.readLine()) != null){
+                String[] columns = line.split("\\|");
+                if(columns.length == namesLength){
+                    data.add(columns);
+                }
+            }br.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
+    // private void deleteFromFile(String dataToDelete, int namesLength){
+    //     List<String[]> data = readFromFile(namesLength);
+    //     try(Fi)
     // }
+
+    private void clearTxtFields(){
+        txtFirstName.setText("");
+        txtLastName.setText("");
+        txtMiddleIN.setText("");
+        txtAddress.setText("");
+        txtTelephone.setText("");
+    }
 
     public static void main(String[] args){
         Telephone app = new Telephone();

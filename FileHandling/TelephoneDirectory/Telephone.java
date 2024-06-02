@@ -2,15 +2,16 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
-public class Telephone extends JFrame {
-    JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone, lblSearch;
-    TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone,txtSearch;
-    JButton btnCreate, btnUpdate, btnDelete, btnClear, btnSearch;
-    JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
+public class Telephone extends JFrame implements ActionListener{
+    private JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone, lblSearch;
+    private TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone,txtSearch;
+    private JButton btnCreate, btnUpdate, btnDelete, btnClear, btnSearch;
+    private JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
+    private File dataFile;
     Telephone(){
         setTitle("Telephone Directory CRUD Application");
         setLayout(new FlowLayout());
@@ -101,6 +102,12 @@ public class Telephone extends JFrame {
             panelButtons.add(button);
         }
 
+        btnCreate.addActionListener(this);
+        btnUpdate.addActionListener(this);
+        btnDelete.addActionListener(this);
+        btnClear.addActionListener(this);
+        btnSearch.addActionListener(this);
+
         panelCRUD.add(panelInput, BorderLayout.NORTH);
         panelCRUD.add(panelButtons, BorderLayout.SOUTH);
 
@@ -114,7 +121,11 @@ public class Telephone extends JFrame {
         panelSearchWhole.add(lblSearch);
         panelSearchWhole.add(panelSearch);
         
-
+        try{
+            
+        }catch(IOException e){
+            e.printStackTrace();
+        }
          // Sample data for the table
         Object[][] data = {
                 {"Abel, J. G.", "110 Oakleaf", "236-4010"},
@@ -161,6 +172,13 @@ public class Telephone extends JFrame {
         add(panelCRUD);
         add(panelTable);
     }
+
+    public void ActionListener (ActionEvent e){
+        if (e.getSource() == btnUpdate){
+
+        }
+    }
+
     public static void main(String[] args){
         Telephone app = new Telephone();
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

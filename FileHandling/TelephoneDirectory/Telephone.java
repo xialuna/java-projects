@@ -142,16 +142,6 @@ public class Telephone extends JFrame {
             }
         };
 
-        // Set up custom cell renderer for alternating row colors
-        table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                c.setBackground((row % 2 == 0)? Color.WHITE: new Color(0xF2F2F2));
-                return c;
-            }
-        });
-
         table.setRowSelectionAllowed(false); // Disable row selection
         table.getTableHeader().setReorderingAllowed(false); // Disable column reordering
         table.getTableHeader().setBackground(new Color(0xC8D8E9));

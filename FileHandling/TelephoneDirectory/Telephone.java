@@ -5,14 +5,17 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.*;
+import java.util.List;
 
-public class Telephone extends JFrame implements ActionListener{
+public class Telephone extends JFrame{
     private JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone, lblSearch;
     private TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone,txtSearch;
     private JButton btnCreate, btnUpdate, btnDelete, btnClear, btnSearch;
     private JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
     private File dataFile;
     Telephone(){
+        dataFile = new File("directory.txt");
         setTitle("Telephone Directory CRUD Application");
         setLayout(new FlowLayout());
         setSize(1212,700);
@@ -102,11 +105,11 @@ public class Telephone extends JFrame implements ActionListener{
             panelButtons.add(button);
         }
 
-        btnCreate.addActionListener(this);
-        btnUpdate.addActionListener(this);
-        btnDelete.addActionListener(this);
-        btnClear.addActionListener(this);
-        btnSearch.addActionListener(this);
+        // btnCreate.addActionListener(this);
+        // btnUpdate.addActionListener(this);
+        // btnDelete.addActionListener(this);
+        // btnClear.addActionListener(this);
+        // btnSearch.addActionListener(this);
 
         panelCRUD.add(panelInput, BorderLayout.NORTH);
         panelCRUD.add(panelButtons, BorderLayout.SOUTH);
@@ -120,30 +123,31 @@ public class Telephone extends JFrame implements ActionListener{
         panelSearch.add(btnSearch);
         panelSearchWhole.add(lblSearch);
         panelSearchWhole.add(panelSearch);
-        
-        try{
-            
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-         // Sample data for the table
-        Object[][] data = {
-                {"Abel, J. G.", "110 Oakleaf", "236-4010"},
-                {"Baker, Sue", "409 Sunset", "645-8978"},
-                {"Carter, L. H. ", "17 Bernary", "567-8766 "},
-                {"Minte, Al", "204 Pine", "356-2453"},
-                {"Abel, J. G.", "110 Oakleaf", "236-4010"},
-                {"Baker, Sue", "409 Sunset", "645-8978"},
-                {"Carter, L. H. ", "17 Bernary", "567-8766 "},
-
-                // Add more rows as needed
-        };
 
         // Column names for the table
         String[] columnNames = {"Name", "Address", "Telephone"};
+        // Create a list to hold the data rows
+        List<String[]> data = new ArrayList<>();
+        
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(dataFile));
+            String line;
+            while((line = br.readLine()) != null){
+                String[] columns = line.split("\\|");
+                if(columns.length == columnNames.length){
+                    data.add(columns);
+                }
+            }br.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        // Convert the list to a 2D array for the table model
+        String[][] dataArray = data.toArray(new String[0][]); //creates an empty array
+        
 
         // Create a table model
-        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        DefaultTableModel model = new DefaultTableModel(dataArray, columnNames);
 
         // Create a JTable with the model
         JTable table = new JTable(model) {
@@ -173,11 +177,11 @@ public class Telephone extends JFrame implements ActionListener{
         add(panelTable);
     }
 
-    public void ActionListener (ActionEvent e){
-        if (e.getSource() == btnUpdate){
+    // public void ActionListener (ActionEvent e){
+    //     if (e.getSource() == btnUpdate){
 
-        }
-    }
+    //     }
+    // }
 
     public static void main(String[] args){
         Telephone app = new Telephone();

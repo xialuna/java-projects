@@ -14,6 +14,10 @@ public class Telephone extends JFrame implements ActionListener{
     private JButton btnInsert, btnUpdate, btnDelete, btnClear, btnSearch;
     private JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
     private File dataFile;
+    // Column names for the table
+    private String[] columnNames = {"Name", "Address", "Telephone"};
+    private final int namesLength = columnNames.length;
+
     Telephone(){
         dataFile = new File("directory.txt");
         setTitle("Telephone Directory CRUD Application");
@@ -124,13 +128,9 @@ public class Telephone extends JFrame implements ActionListener{
         panelSearchWhole.add(lblSearch);
         panelSearchWhole.add(panelSearch);
 
-        // Column names for the table
-        String[] columnNames = {"Name", "Address", "Telephone"};
-
 
         // Convert the list to a 2D array for the table model
-        String[][] dataArray = readFromFile(columnNames.length).toArray(new String[0][]); //creates an empty array
-        
+        String[][] dataArray = readFromFile().toArray(new String[0][]); //creates an empty array
 
         // Create a table model
         DefaultTableModel model = new DefaultTableModel(dataArray, columnNames);
@@ -142,8 +142,6 @@ public class Telephone extends JFrame implements ActionListener{
                 return false; // Make cells non-editable
             }
         };
-
-        table.setRowSelectionAllowed(false); // Disable row selection
         table.getTableHeader().setReorderingAllowed(false); // Disable column reordering
         table.getTableHeader().setBackground(new Color(0xC8D8E9));
 
@@ -170,20 +168,23 @@ public class Telephone extends JFrame implements ActionListener{
             String telephone = txtAddress.getText();
             String wholeData = name + "|" + address +"|" + telephone;
             writeToFile(wholeData);
+            readFromFile();
             clearTxtFields();
 
         }
     }
 
     private void writeToFile (String data){
-        try(FileWriter writer = new FileWriter("directory.txt", true)){
+        try(FileWriter writer = new FileWriter("directory.txt", true);
+        BufferedWriter bw = new BufferedWriter(writer);
+             PrintWriter out = new PrintWriter(bw)){
             writer.write(data + "|");
         }catch (IOException e) {
             e.printStackTrace(); // If an IOException occurs, print the stack trace for debugging
         }
     }
 
-    private List<String[]> readFromFile(int namesLength){
+    private List<String[]> readFromFile(){
         // Create a list to hold the data rows
         List<String[]> data = new ArrayList<>();
         try{

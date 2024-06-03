@@ -1,180 +1,131 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CRUDExample extends JFrame implements ActionListener {
-    private JTextField textField;
-    private JTextArea textArea;
-    private JButton createButton, updateButton, deleteButton, clearButton, searchButton;
+public class CRUDExample extends JFrame {
+    private JTextField idField, nameField, gradeField, commentsField;
+    private DefaultTableModel tableModel;
+    private JTable table;
+    private final String filePath = "record.txt";
 
     public CRUDExample() {
-        setTitle("CRUD Example");
+        setTitle("Student Records CRUD Example");
+        setSize(600, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(400, 300);
         setLocationRelativeTo(null);
 
-        textField = new JTextField(20);
-        textArea = new JTextArea(10, 20);
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        createButton = new JButton("Create");
-        updateButton = new JButton("Update");
-        deleteButton = new JButton("Delete");
-        clearButton = new JButton("Clear");
-        searchButton = new JButton("Search");
+        // Initialize components
+        idField = new JTextField(5);
+        nameField = new JTextField(15);
+        gradeField = new JTextField(5);
+        commentsField = new JTextField(20);
+        
+        JButton addButton = new JButton("Add");
+        JButton updateButton = new JButton("Update");
+        JButton deleteButton = new JButton("Delete");
+        JButton loadButton = new JButton("Load");
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 1));
-        panel.add(textField);
-        panel.add(scrollPane);
+        addButton.addActionListener(new AddButtonListener());
+        updateButton.addActionListener(new UpdateButtonListener());
+        deleteButton.addActionListener(new DeleteButtonListener());
+        loadButton.addActionListener(new LoadButtonListener());
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
-        buttonPanel.add(createButton);
-        buttonPanel.add(updateButton);
-        buttonPanel.add(deleteButton);
-        buttonPanel.add(clearButton);
-        buttonPanel.add(searchButton);
+        tableModel = new DefaultTableModel(new Object[]{"ID", "Name", "Grade", "Comments"}, 0);
+        table = new JTable(tableModel);
+        loadRecords(); // Load records at startup
 
-        Container container = getContentPane();
-        container.setLayout(new BorderLayout());
-        container.add(panel, BorderLayout.CENTER);
-        container.add(buttonPanel, BorderLayout.SOUTH);
+        // Layout setup
+        JPanel inputPanel = new JPanel();
+        inputPanel.add(new JLabel("ID:"));
+        inputPanel.add(idField);
+        inputPanel.add(new JLabel("Name:"));
+        inputPanel.add(nameField);
+        inputPanel.add(new JLabel("Grade:"));
+        inputPanel.add(gradeField);
+        inputPanel.add(new JLabel("Comments:"));
+        inputPanel.add(commentsField);
+        inputPanel.add(addButton);
+        inputPanel.add(updateButton);
+        inputPanel.add(deleteButton);
+        inputPanel.add(loadButton);
 
-        createButton.addActionListener(this);
-        updateButton.addActionListener(this);
-        deleteButton.addActionListener(this);
-        clearButton.addActionListener(this);
-        searchButton.addActionListener(this);
+        inputPanel.setBorder(new EmptyBorder(20,0,20,0));
+
+        add(new JScrollPane(table), BorderLayout.CENTER);
+        add(inputPanel, BorderLayout.SOUTH);
+
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == createButton) {
-            String newData = textField.getText();
-            writeToFile(newData);
-            textField.setText("");
-            readFromFile();
-        } else if (e.getSource() == updateButton) {
-            String newData = textField.getText();
-            updateFile(newData);
-            textField.setText("");
-            readFromFile();
-        } else if (e.getSource() == deleteButton) {
-            String dataToDelete = textField.getText();
-            deleteFromFile(dataToDelete);
-            textField.setText("");
-            readFromFile();
-        } else if (e.getSource() == clearButton) {
-            clearFile();
-            readFromFile();
-        } else if (e.getSource() == searchButton) {
-            String searchData = textField.getText();
-            searchInFile(searchData);
-        }
-    }
-
-    private void writeToFile(String data) {
-        try (FileWriter writer = new FileWriter("records.txt", true);
-             BufferedWriter bw = new BufferedWriter(writer);
-             PrintWriter out = new PrintWriter(bw)) {
-            out.println(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void readFromFile() {
-        try (BufferedReader br = new BufferedReader(new FileReader("records.txt"))) {
-            StringBuilder sb = new StringBuilder();
+    private void loadRecords() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            textArea.setText(sb.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void updateFile(String newData) {
-        try {
-            File file = new File("records.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line;
-            StringBuilder inputBuffer = new StringBuilder();
-
             while ((line = reader.readLine()) != null) {
-                inputBuffer.append(line);
-                inputBuffer.append('\n');
-            }
-            reader.close();
-            String inputStr = inputBuffer.toString();
-
-            inputStr = inputStr.replace(textArea.getSelectedText(), newData);
-
-            FileOutputStream fileOut = new FileOutputStream("records.txt");
-            fileOut.write(inputStr.getBytes());
-            fileOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void deleteFromFile(String dataToDelete) {
-        try {
-            File inputFile = new File("records.txt");
-            File tempFile = new File("tempRecords.txt");
-
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-
-            String lineToRemove = dataToDelete;
-            String currentLine;
-
-            while ((currentLine = reader.readLine()) != null) {
-                String trimmedLine = currentLine.trim();
-                if (trimmedLine.equals(lineToRemove)) continue;
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
-            writer.close();
-            reader.close();
-            boolean successful = tempFile.renameTo(inputFile);
-            if (!successful) {
-                System.out.println("Could not rename file");
+                String[] data = line.split(",");
+                tableModel.addRow(data);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void clearFile() {
-        try {
-            FileWriter fwOb = new FileWriter("records.txt", false);
-            PrintWriter pwOb = new PrintWriter(fwOb, false);
-            pwOb.flush();
-            pwOb.close();
-            fwOb.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void searchInFile(String searchData) {
-        try (BufferedReader br = new BufferedReader(new FileReader("records.txt"))) {
-            String line;
-            boolean found = false;
-            while ((line = br.readLine()) != null) {
-                if (line.contains(searchData)) {
-                    JOptionPane.showMessageDialog(this, "Found: " + line);
-                    found = true;
-                    break;
+    private void saveRecords() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                for (int j = 0; j < tableModel.getColumnCount(); j++) {
+                    writer.print(tableModel.getValueAt(i, j));
+                    if (j < tableModel.getColumnCount() - 1) writer.print(",");
                 }
-            }
-            if (!found) {
-                JOptionPane.showMessageDialog(this, "Not Found");
+                writer.println();
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class AddButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String id = idField.getText();
+            String name = nameField.getText();
+            String grade = gradeField.getText();
+            String comments = commentsField.getText();
+            tableModel.addRow(new Object[]{id, name, grade, comments});
+            saveRecords();
+        }
+    }
+
+    private class UpdateButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                tableModel.setValueAt(idField.getText(), selectedRow, 0);
+                tableModel.setValueAt(nameField.getText(), selectedRow, 1);
+                tableModel.setValueAt(gradeField.getText(), selectedRow, 2);
+                tableModel.setValueAt(commentsField.getText(), selectedRow, 3);
+                saveRecords();
+            }
+        }
+    }
+
+    private class DeleteButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                tableModel.removeRow(selectedRow);
+                saveRecords();
+            }
+        }
+    }
+
+    private class LoadButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            tableModel.setRowCount(0); // Clear existing data
+            loadRecords();
         }
     }
 
@@ -182,7 +133,6 @@ public class CRUDExample extends JFrame implements ActionListener {
         SwingUtilities.invokeLater(() -> {
             CRUDExample example = new CRUDExample();
             example.setVisible(true);
-            example.readFromFile();
         });
     }
 }

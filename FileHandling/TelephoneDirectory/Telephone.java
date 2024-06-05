@@ -208,6 +208,8 @@ public class Telephone extends JFrame implements ActionListener{
                 tableModel.removeRow(selectedRow);// removes the row at the specified index from the table model
                 writeRecords();// save the updated data to txtFile
                 clearTxtFields();
+            }else{
+                JOptionPane.showMessageDialog(this, "Please select the row in the table that you want to delete");
             }
         }
     }

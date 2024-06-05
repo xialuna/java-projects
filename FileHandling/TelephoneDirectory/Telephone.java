@@ -193,6 +193,7 @@ public class Telephone extends JFrame implements ActionListener{
                 tableModel.setValueAt(txtTelephone.getText(), selectedRow, 2);
                 sortTable();
                 writeRecords();
+                clearTxtFields();
             }else{
                 JOptionPane.showMessageDialog(this, "Please select the row in the table that you want to update");
             }
@@ -206,6 +207,7 @@ public class Telephone extends JFrame implements ActionListener{
             if (selectedRow != -1) {
                 tableModel.removeRow(selectedRow);// removes the row at the specified index from the table model
                 writeRecords();// save the updated data to txtFile
+                clearTxtFields();
             }
         }
     }

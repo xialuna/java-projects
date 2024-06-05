@@ -15,6 +15,7 @@ public class Telephone extends JFrame implements ActionListener{
     private JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
     private File dataFile = new File("directory.txt");
     DefaultTableModel tableModel;
+    JTable table;
 
 
     Telephone(){
@@ -133,7 +134,7 @@ public class Telephone extends JFrame implements ActionListener{
         tableModel = new DefaultTableModel(new Object[]{"Name", "Address", "Telephone"}, 0);
 
         // Create a JTable with the model
-        JTable table = new JTable(tableModel) {
+        table = new JTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Make cells non-editable
@@ -167,9 +168,20 @@ public class Telephone extends JFrame implements ActionListener{
             String telephone = txtTelephone.getText();
              // adds a new row to the tableModel using the values retrieved 
             tableModel.addRow(new Object[]{name, address, telephone}); 
+            sortTable();
             writeRecords();
             clearTxtFields();
+        }
 
+        // DELETE BUTTON
+        if (e.getSource() == btnDelete){
+            int selectedRow = table.getSelectedRow(); //get index of selected row
+
+            //if a specific row is selected
+            if (selectedRow != -1) {
+                tableModel.removeRow(selectedRow);// removes the row at the specified index from the table model
+                writeRecords();// save the updated data to txtFile
+            }
         }
     }
 
@@ -203,10 +215,23 @@ public class Telephone extends JFrame implements ActionListener{
         }
     }
 
-    // private void deleteFromFile(String dataToDelete, int namesLength){
-    //     List<String[]> data = readRecords(namesLength);
-    //     try(Fi)
-    // }
+    private void sortTable() {
+        List<Object[]> rows = new ArrayList<>();
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            Object[] row = new Object[tableModel.getColumnCount()];
+            for (int j = 0; j < tableModel.getColumnCount(); j++) {
+                row[j] = tableModel.getValueAt(i, j);
+            }
+            rows.add(row);
+        }
+
+        rows.sort(Comparator.comparing(row -> row[0].toString()));
+
+        tableModel.setRowCount(0);
+        for (Object[] row : rows) {
+            tableModel.addRow(row);
+        }
+    }
 
     private void clearTxtFields(){
         txtFirstName.setText("");

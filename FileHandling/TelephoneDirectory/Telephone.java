@@ -160,8 +160,8 @@ public class Telephone extends JFrame implements ActionListener{
         // padding for the whole panel
         panelButtons.setBorder(new EmptyBorder(60, 0,0,0));
         panelSearch.setBorder(new EmptyBorder(0, 0,20,0));
-        panelCRUD.setBorder(new EmptyBorder(20, 20, 0, 20));
-        panelTable.setBorder(new EmptyBorder(20, 20, 0, 20));
+        panelCRUD.setBorder(new EmptyBorder(20, 40, 0, 20));
+        panelTable.setBorder(new EmptyBorder(20, 40, 0, 20));
         panelTable.add(panelSearchWhole, BorderLayout.NORTH);
         panelTable.add(scrollPane, BorderLayout.SOUTH);
 

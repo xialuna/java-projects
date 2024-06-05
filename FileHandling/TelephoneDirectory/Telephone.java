@@ -128,9 +128,7 @@ public class Telephone extends JFrame implements ActionListener{
         panelSearch.add(btnSearch);
         panelSearchWhole.add(lblSearch);
         panelSearchWhole.add(panelSearch);
-
-        ////////////////////
-       
+ 
 
         // Create a table model
         tableModel = new DefaultTableModel(new Object[]{"Name", "Address", "Telephone"}, 0);

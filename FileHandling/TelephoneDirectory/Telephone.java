@@ -213,7 +213,10 @@ public class Telephone extends JFrame implements ActionListener{
             }
         }
 
-        
+        //CLEAR BUTTON
+        if(e.getSource() == btnClear){
+            clearTxtFields();
+        }
 
         // SEARCH BUTTON
         if (e.getSource() == btnSearch) {

@@ -13,13 +13,11 @@ public class Telephone extends JFrame implements ActionListener{
     private TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone,txtSearch;
     private JButton btnInsert, btnUpdate, btnDelete, btnClear, btnSearch;
     private JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
-    private File dataFile;
-    // Column names for the table
-    private String[] columnNames = {"Name", "Address", "Telephone"};
-    private final int namesLength = columnNames.length;
+    private File dataFile = new File("directory.txt");
+    DefaultTableModel tableModel;
+
 
     Telephone(){
-        dataFile = new File("directory.txt");
         setTitle("Telephone Directory CRUD Application");
         setLayout(new FlowLayout());
         setSize(1212,700);
@@ -128,15 +126,14 @@ public class Telephone extends JFrame implements ActionListener{
         panelSearchWhole.add(lblSearch);
         panelSearchWhole.add(panelSearch);
 
-
-        // Convert the list to a 2D array for the table model
-        String[][] dataArray = readFromFile().toArray(new String[0][]); //creates an empty array
+        ////////////////////
+       
 
         // Create a table model
-        DefaultTableModel model = new DefaultTableModel(dataArray, columnNames);
+        tableModel = new DefaultTableModel(new Object[]{"Name", "Address", "Telephone"}, 0);
 
         // Create a JTable with the model
-        JTable table = new JTable(model) {
+        JTable table = new JTable(tableModel) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Make cells non-editable
@@ -144,6 +141,8 @@ public class Telephone extends JFrame implements ActionListener{
         };
         table.getTableHeader().setReorderingAllowed(false); // Disable column reordering
         table.getTableHeader().setBackground(new Color(0xC8D8E9));
+
+        readRecords(); // Load records at startup
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
@@ -165,46 +164,47 @@ public class Telephone extends JFrame implements ActionListener{
         if (e.getSource() == btnInsert){
             String name = txtLastName.getText() + ", " + txtFirstName.getText() + " " + txtMiddleIN.getText();
             String address = txtAddress.getText();
-            String telephone = txtAddress.getText();
-            String wholeData = name + "|" + address +"|" + telephone;
-            writeToFile(wholeData);
-            readFromFile();
+            String telephone = txtTelephone.getText();
+             // adds a new row to the tableModel using the values retrieved 
+            tableModel.addRow(new Object[]{name, address, telephone}); 
+            writeRecords();
             clearTxtFields();
 
         }
     }
 
-    private void writeToFile (String data){
-        try(FileWriter writer = new FileWriter("directory.txt", true);
-        BufferedWriter bw = new BufferedWriter(writer);
-             PrintWriter out = new PrintWriter(bw)){
-            writer.write(data + "|");
-        }catch (IOException e) {
-            e.printStackTrace(); // If an IOException occurs, print the stack trace for debugging
+    private void writeRecords(){
+        try(PrintWriter writer = new PrintWriter(new FileWriter(dataFile))){
+            for (int i = 0; i < tableModel.getRowCount(); i++) { //loop rows
+                for (int j = 0; j < tableModel.getColumnCount(); j++) { //loop columns
+                    // Write cell value at (row, col) to the file
+                    writer.print(tableModel.getValueAt(i, j)); 
+                    // If this is not the last column, print the delimiter
+                    if (j < tableModel.getColumnCount() - 1) writer.print("|");
+                }
+                writer.println(); // Move to the next line after finishing the current row
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    private List<String[]> readFromFile(){
-        // Create a list to hold the data rows
-        List<String[]> data = new ArrayList<>();
+    private void readRecords(){
         try{
             BufferedReader br = new BufferedReader(new FileReader(dataFile));
             String line;
             while((line = br.readLine()) != null){
-                String[] columns = line.split("\\|");
-                if(columns.length == namesLength){
-                    data.add(columns);
-                }
+                String[] data = line.split("\\|");
+                // Add row to the table model
+                tableModel.addRow(data);
             }br.close();
         }catch(IOException e){
             e.printStackTrace();
         }
-
-        return data;
     }
 
     // private void deleteFromFile(String dataToDelete, int namesLength){
-    //     List<String[]> data = readFromFile(namesLength);
+    //     List<String[]> data = readRecords(namesLength);
     //     try(Fi)
     // }
 

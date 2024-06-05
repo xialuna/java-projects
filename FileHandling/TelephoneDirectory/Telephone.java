@@ -70,11 +70,11 @@ public class Telephone extends JFrame implements ActionListener{
         txtMiddleIN.setFont(inputFont);
         
         panelName.add(lblFirstName);
-        panelName.add(lblLastName);
         panelName.add(lblMiddleIN);
+        panelName.add(lblLastName);
         panelName.add(txtFirstName);
-        panelName.add(txtLastName);
         panelName.add(txtMiddleIN);
+        panelName.add(txtLastName);
 
         lblAddress = new JLabel("Address: ");
         txtAddress = new TextField("", 20);

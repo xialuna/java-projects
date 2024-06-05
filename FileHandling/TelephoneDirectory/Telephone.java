@@ -212,6 +212,25 @@ public class Telephone extends JFrame implements ActionListener{
                 JOptionPane.showMessageDialog(this, "Please select the row in the table that you want to delete");
             }
         }
+
+        
+
+        // SEARCH BUTTON
+        if (e.getSource() == btnSearch) {
+            String search = txtSearch.getText();
+            boolean found = false;
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                if (tableModel.getValueAt(i, 2).equals(search)) {
+                    table.setRowSelectionInterval(i, i);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                JOptionPane.showMessageDialog(this, "Record not found. Make sure to check if telephone number is correct.");
+            }
+        }
+
     }
 
     private void writeRecords(){

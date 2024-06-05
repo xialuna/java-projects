@@ -1,5 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -145,6 +147,14 @@ public class Telephone extends JFrame implements ActionListener{
 
         readRecords(); // Load records at startup
 
+         // Add selection listener to the table
+         table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                tableSelected();
+            }
+        });
+        
+
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
         scrollPane.getViewport().setBackground(Color.WHITE);
@@ -171,6 +181,21 @@ public class Telephone extends JFrame implements ActionListener{
             sortTable();
             writeRecords();
             clearTxtFields();
+        }
+
+        // UPDATE
+        if (e.getSource() == btnUpdate) {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                String fullName = txtLastName.getText() + ", " + txtFirstName.getText() + " " + txtMiddleIN.getText();
+                tableModel.setValueAt(fullName, selectedRow, 0);
+                tableModel.setValueAt(txtAddress.getText(), selectedRow, 1);
+                tableModel.setValueAt(txtTelephone.getText(), selectedRow, 2);
+                sortTable();
+                writeRecords();
+            }else{
+                JOptionPane.showMessageDialog(this, "Please select the row in the table that you want to update");
+            }
         }
 
         // DELETE BUTTON
@@ -230,6 +255,41 @@ public class Telephone extends JFrame implements ActionListener{
         tableModel.setRowCount(0);
         for (Object[] row : rows) {
             tableModel.addRow(row);
+        }
+    }
+
+    private void tableSelected() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            String fullName = tableModel.getValueAt(selectedRow, 0).toString();
+            String[] nameParts = fullName.split(", ");
+    
+            String lastName = "";
+            String firstName = "";
+            String middleInitial = "";
+    
+            // Check if nameParts array has at least one element (last name)
+            if (nameParts.length > 0) {
+                lastName = nameParts[0];
+            }
+    
+            // Check if nameParts array has at least two elements (first name and middle initial)
+            if (nameParts.length > 1) {
+                String[] firstAndMiddle = nameParts[1].split(" ");
+                if (firstAndMiddle.length > 0) {
+                    firstName = firstAndMiddle[0];
+                }
+                // Check if firstAndMiddle array has at least two elements (middle initial)
+                if (firstAndMiddle.length > 1) {
+                    middleInitial = firstAndMiddle[1];
+                }
+            }
+            // Set the extracted values to the corresponding text fields
+            txtFirstName.setText(firstName);
+            txtLastName.setText(lastName);
+            txtMiddleIN.setText(middleInitial);
+            txtAddress.setText(tableModel.getValueAt(selectedRow, 1).toString());
+            txtTelephone.setText(tableModel.getValueAt(selectedRow, 2).toString());
         }
     }
 

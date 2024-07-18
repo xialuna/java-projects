@@ -1,3 +1,100 @@
-public class Problem1{
-    
+import java.util.Scanner;
+class Stack {
+    public int top;
+    public int value;
+    public Stack next;
+
+    public static Stack createEmptyStack() {
+        Stack stack = new Stack();
+        stack.top = -1;
+        return stack;
+    }
+
+    public static boolean isFull(Stack stack, int size) {
+        return stack.top == size - 1;
+    }
+
+    public static boolean isEmpty(Stack stack) {
+        return stack.top == -1;
+    }
+
+    public static void push(Stack stack, int item) {
+        if (!isFull(stack, 100)) {
+            Stack nextNode = stack.next;
+            Stack newNode = new Stack();
+
+            stack.next = newNode;
+            newNode.value = item;
+            newNode.next = nextNode;
+
+            stack.top++;
+        }
+    }
+
+    public static int pop(Stack stack) {
+        if (!isEmpty(stack)) {
+            Stack firstNode = stack.next;
+            Stack secondNode = firstNode.next;
+
+            stack.next = secondNode;
+            stack.top--;
+
+            return firstNode.value;
+        }
+        return 0;
+    }
+
+    public static int peek(Stack stack) {
+        return (!isEmpty(stack)) ? stack.next.value : 0;
+    }
+
+    public static void display(Stack stack) {
+        Stack current = stack.next;
+        while (current != null) {
+            System.out.printf("%d\n", current.value);
+            current = current.next;
+        }
+    }
+}
+
+public class Problem2{
+public static void main(String[] args) {
+        Stack stack = Stack.createEmptyStack();
+        int counter = 1;
+
+        Scanner scanner = new Scanner(System.in);
+        String operation = " ";
+
+        while (!operation.equals("#")) {
+            System.out.print("Enter operation " + (counter) + ": ");
+            operation = scanner.nextLine();
+            counter++;
+
+            if (operation.startsWith("+")) {
+                int number = Integer.parseInt(operation.split(" ")[1]);
+                Stack.push(stack, number);
+            } else if (operation.equals("-")) {
+                if (!Stack.isEmpty(stack)) {
+                    Stack.pop(stack);
+                } else {
+                    System.out.println("Stack is empty.");
+                }
+            }
+
+        } 
+        int minElement = findMin(stack);
+        System.out.println("Minimum element: " + minElement);
+    }
+
+    private static int findMin(Stack stack) {
+        int min = Integer.MAX_VALUE;
+        Stack current = stack.next;
+        while (current != null) {
+            if (current.value < min) {
+                min = current.value;
+            }
+            current = current.next;
+        }
+        return min == Integer.MAX_VALUE ? -1 : min;
+    }
 }

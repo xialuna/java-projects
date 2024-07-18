@@ -1,31 +1,82 @@
+/*
+ * Authors:
+ *      Cheng, Xian Hui B.
+ *      Pascual, Ian Nevri B.
+ *      Quinto, Raven Luke
+ * 
+ * Project: Telephone Directory (Database Connectivity)
+ */
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
+import java.sql.*;
 import java.util.*;
 import java.util.List;
 
 public class Telephone extends JFrame implements ActionListener{
+    private static final String db_url = "jdbc:mysql://localhost:3306/teldir";
+    private static final String user = "root";
+    private static final String pass = "";
     private JLabel lblHeading, lblFirstName, lblLastName, lblMiddleIN, lblAddress, lblTelephone, lblSearch;
     private TextField txtFirstName, txtLastName, txtMiddleIN, txtAddress, txtTelephone,txtSearch;
     private JButton btnInsert, btnUpdate, btnDelete, btnClear, btnSearch;
     private JPanel panelName, panelAddress, panelTelephone, panelButtons, panelSearch, panelSearchWhole, panelInput, panelCRUD, panelTable;
-     // File to store the data
-    private File dataFile = new File("directory.txt");
     DefaultTableModel tableModel;
     JTable table;
 
     // Constructor to initialize the GUI components
     Telephone(){
+        // Creates a database if it doesn't exist and also creates the tables needed
+        try(Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", user, pass);
+        Statement stmt = conn.createStatement();){
+            ResultSet rs = stmt.executeQuery("SHOW DATABASES");
+            boolean found = false;
+
+            // Loops to check if the database already exists
+            while(rs.next()){
+                String dbName = rs.getString(1);
+                // Switch if the database is found
+                if(dbName.equals("teldir")){    
+                    found = true;                
+                    break;
+                }                
+            }
+
+            // If not found, create the database as well as the initial directory
+            if(!found) {
+                String createdb = "CREATE DATABASE IF NOT EXISTS teldir";
+                stmt.executeUpdate(createdb);
+                stmt.execute("USE teldir");
+                String createtbl = "CREATE TABLE IF NOT EXISTS directory("
+                        + "id INT AUTO_INCREMENT PRIMARY KEY,"
+                        + "name VARCHAR(50) NOT NULL,"
+                        + "address VARCHAR(50),"
+                        + "telNo VARCHAR(15)"
+                        + ")";
+                stmt.executeUpdate(createtbl);
+                // This is the initial directory
+                stmt.executeUpdate("INSERT INTO directory (name, address, telNo) VALUES ('Abel, J. G.','110 Oakleaf','236-4010')");
+                stmt.executeUpdate("INSERT INTO directory (name, address, telNo) VALUES ('Baker, Sue','409 Sunset','645-8978')");
+                stmt.executeUpdate("INSERT INTO directory (name, address, telNo) VALUES ('Carter, L. H.','17 Bernary','567-8766')");
+                stmt.executeUpdate("INSERT INTO directory (name, address, telNo) VALUES ('Lang, Al','311 Moss','716-1111')");
+                stmt.executeUpdate("INSERT INTO directory (name, address, telNo) VALUES ('Minte, Al','204 Pine','356-2453')");
+                stmt.executeUpdate("INSERT INTO directory (name, address, telNo) VALUES ('Sands, T. H.','671 First','734-7261')");
+            } else {
+                System.out.println("DB already created.");
+            }
+        } catch (SQLException s){
+            s.printStackTrace();
+        }
+
         setTitle("Telephone Directory CRUD Application");
         setLayout(new FlowLayout());
         setSize(1212,700);
-        setResizable(false);
+        setResizable(true);
         setLocationRelativeTo(null);
 
         // Initialize panels
@@ -176,7 +227,7 @@ public class Telephone extends JFrame implements ActionListener{
         panelTable.add(panelSearchWhole, BorderLayout.NORTH);
         panelTable.add(scrollPane, BorderLayout.SOUTH);
 
-        // Add CRUD and table panels to main frame
+        // Add panels to frame
         add(panelCRUD);
         add(panelTable);
     }
@@ -188,7 +239,7 @@ public class Telephone extends JFrame implements ActionListener{
             String name = txtLastName.getText() + ", " + txtFirstName.getText() + " " + txtMiddleIN.getText();
             String address = txtAddress.getText();
             String telephone = txtTelephone.getText();
-             // adds a new row to the tableModel using the values retrieved 
+             // Adds a new row to the tableModel using the values retrieved 
             tableModel.addRow(new Object[]{name, address, telephone}); 
             sortTable();
             writeRecords();
@@ -197,33 +248,48 @@ public class Telephone extends JFrame implements ActionListener{
 
         // UPDATE BUTTON
         if (e.getSource() == btnUpdate) {
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow != -1) {//If user selects a row in the table
-                // User input of user will be set into the table
-                String fullName = txtLastName.getText() + ", " + txtFirstName.getText() + " " + txtMiddleIN.getText();
-                tableModel.setValueAt(fullName, selectedRow, 0);
-                tableModel.setValueAt(txtAddress.getText(), selectedRow, 1);
-                tableModel.setValueAt(txtTelephone.getText(), selectedRow, 2);
-                sortTable(); // Sort the table in an alphabetical order
-                writeRecords(); // Save the updated data to txtFile
-                clearTxtFields(); // Clear text fields once done
-            }else{
-                JOptionPane.showMessageDialog(this, "Please select the row in the table that you want to update");
+            try(Connection conn = DriverManager.getConnection(db_url, user, pass);
+            Statement stmt = conn.createStatement()){
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1){
+                    String oldName = String.format("%s",tableModel.getValueAt(selectedRow, 0));  
+                    String fullname = txtLastName.getText() + ", " + txtFirstName.getText() + " " + txtMiddleIN.getText();
+                    String address = txtAddress.getText();
+                    String telNo = txtTelephone.getText();
+                String update = String.format("UPDATE directory SET name = '%s', address = '%s', telNo = '%s' WHERE name = '%s'",fullname,address,telNo,oldName);
+                System.out.println(update);
+                stmt.executeUpdate(update); 
+                tableModel.setValueAt(fullname, selectedRow, 0);
+                tableModel.setValueAt(address, selectedRow, 1);
+                tableModel.setValueAt(telNo, selectedRow, 2);
+                sortTable();
+                clearTxtFields();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Please select the row in the table that you want to update");
+                }                           
+            } catch (SQLException s){
+                s.printStackTrace();
             }
         }
 
         // DELETE BUTTON
         if (e.getSource() == btnDelete){
-            int selectedRow = table.getSelectedRow(); //get index of selected row
-
-            //if a specific row is selected
-            if (selectedRow != -1) {
-                tableModel.removeRow(selectedRow);// removes the row at the specified index from the table model
-                writeRecords();// Save the updated data to txtFile
-                clearTxtFields();// Clear text fields once done
-            }else{
-                JOptionPane.showMessageDialog(this, "Please select the row in the table that you want to delete");
+            clearTxtFields();
+            try (Connection conn = DriverManager.getConnection(db_url, user, pass);
+            Statement stmt = conn.createStatement()) {
+                int selectedRow = table.getSelectedRow();
+                if(selectedRow != -1){
+                    String delete = String.format("DELETE FROM directory WHERE name = '%s'",tableModel.getValueAt(selectedRow, 0));
+                    stmt.executeUpdate(delete);
+                    tableModel.removeRow(selectedRow);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Please select the row in the table that you want to delete");
+                }
+                
+            } catch (SQLException s) {
+                s.printStackTrace();
             }
+            
         }
 
         //CLEAR BUTTON
@@ -250,36 +316,31 @@ public class Telephone extends JFrame implements ActionListener{
 
     }
 
-     // Method that writes the current table data to the file.
+     // Method that writes the current table data to the database.
     private void writeRecords(){
-        try(PrintWriter writer = new PrintWriter(new FileWriter(dataFile))){
-            for (int i = 0; i < tableModel.getRowCount(); i++) { //loop rows
-                for (int j = 0; j < tableModel.getColumnCount(); j++) { //loop columns
-                    // Write cell value at (row, col) to the file
-                    writer.print(tableModel.getValueAt(i, j)); 
-                    // If this is not the last column, print the delimiter
-                    if (j < tableModel.getColumnCount() - 1) writer.print("|");
-                }
-                writer.println(); // Move to the next line after finishing the current row
-            }
-        } catch (IOException e) {
+        String fullname = txtLastName.getText() + ", " + txtFirstName.getText() + " " + txtMiddleIN.getText();
+        String insert = String.format("INSERT INTO directory (name, address, telNo) VALUES ('%s','%s','%s')",fullname,txtAddress.getText(),txtTelephone.getText());
+        try (Connection conn = DriverManager.getConnection(db_url, user, pass);
+            Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(insert);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // Method that reads data from the file and loads it into the table.
+    // Method that reads data from the database and loads it into the table.
     private void readRecords(){
-        try{
-            BufferedReader br = new BufferedReader(new FileReader(dataFile));
-            String line;
-            while((line = br.readLine()) != null){
-                // Split the line by '|' to get column values
-                String[] data = line.split("\\|");
-                // Add row to the table model
-                tableModel.addRow(data);
-            }br.close();
-        }catch(IOException e){
-            e.printStackTrace();
+        try(Connection conn = DriverManager.getConnection(db_url, user, pass);
+        Statement stmt = conn.createStatement()) {
+            String query1 = "SELECT * FROM directory";
+            ResultSet rs = stmt.executeQuery(query1);
+            
+            while(rs.next()){                
+                tableModel.addRow(new Object[]{rs.getString("name"),rs.getString("address"),rs.getString("telNo")});
+            }
+            sortTable();
+        } catch(SQLException e){
+            e.printStackTrace();;
         }
     }
      // Method that sorts the table rows alphabetically by the first column (name)
@@ -351,6 +412,5 @@ public class Telephone extends JFrame implements ActionListener{
         Telephone app = new Telephone();
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         app.setVisible(true);
-
     }
 }

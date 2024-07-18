@@ -1,12 +1,3 @@
-/**
- * @author GROUP # 2
- * Members:
- * - Cheng, Xian
- * - Pascual, Ian Nevri
- * - Quinto, Raven Luke
- * 
- * CASE STUDY 3: Billing Software
- */
 
 
 // Fruit class represents a generic fruit with a name and a code.
